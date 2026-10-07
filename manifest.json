@@ -1,0 +1,24 @@
+{
+  "name": "記帳小克",
+  "short_name": "小克記帳",
+  "start_url": "./ledger.html",
+  "id": "./ledger.html",
+  "display": "standalone",
+  "background_color": "#1C2038",
+  "theme_color": "#1C2038",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%231C2038'/%3E%3Crect x='36' y='52' width='120' height='88' rx='28' fill='%23D97757'/%3E%3Crect x='64' y='76' width='14' height='20' rx='7' fill='%231C2038'/%3E%3Crect x='114' y='76' width='14' height='20' rx='7' fill='%231C2038'/%3E%3Ccircle cx='70' cy='82' r='3' fill='%23FFFFFF'/%3E%3Ccircle cx='120' cy='82' r='3' fill='%23FFFFFF'/%3E%3Cpath d='M84 108 Q96 122 108 108' stroke='%231C2038' stroke-width='6' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='54' cy='98' r='7' fill='%23FF8FA0' opacity='0.7'/%3E%3Ccircle cx='138' cy='98' r='7' fill='%23FF8FA0' opacity='0.7'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231C2038'/%3E%3Crect x='96' y='140' width='320' height='234' rx='74' fill='%23D97757'/%3E%3Crect x='170' y='204' width='38' height='54' rx='19' fill='%231C2038'/%3E%3Crect x='304' y='204' width='38' height='54' rx='19' fill='%231C2038'/%3E%3Ccircle cx='186' cy='220' r='8' fill='%23FFFFFF'/%3E%3Ccircle cx='320' cy='220' r='8' fill='%23FFFFFF'/%3E%3Cpath d='M224 290 Q256 326 288 290' stroke='%231C2038' stroke-width='16' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='144' cy='262' r='18' fill='%23FF8FA0' opacity='0.7'/%3E%3Ccircle cx='368' cy='262' r='18' fill='%23FF8FA0' opacity='0.7'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
