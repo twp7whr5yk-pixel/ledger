@@ -1,0 +1,601 @@
+<!doctype html>
+
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="記帳">
+<meta name="theme-color" content="#1C2038">
+<title>記帳</title>
+<style>
+:root{
+  --ink:#1C2038;--ink2:#2B3157;--paper:#F4F5F8;--sf:#FFFFFF;--line:#E1E4EC;--mut:#667089;
+  --hkd:#E8344E;--hkd-lt:#FF7A8C;--cny:#F2B731;--inc:#15803D;--bad:#B91C1C;
+  --num:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.45 -apple-system,"PingFang HK","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--hkd);outline-offset:2px}
+.hero :focus-visible{outline-color:#fff}
+[hidden]{display:none!important}
+#app{max-width:520px;margin:0 auto;min-height:100dvh;background:var(--paper);padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+.num,.big,#amount{font-family:var(--num);font-variant-numeric:tabular-nums}
+
+/* hero */
+.hero{background:var(–ink);color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 18px 26px;border-radius:0 0 30px 30px}
+.heroTop{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.04em}
+.sub{font-size:14px;color:rgba(255,255,255,.72);text-align:right}
+#banner{margin:12px 16px 0;background:#FFF1CC;color:#4A3A00;border-radius:12px;padding:10px 12px;font-size:14px}
+
+.seg{display:flex;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:9px;color:rgba(255,255,255,.7);font-weight:700}
+.seg button.on{background:#fff;color:var(–ink)}
+.cur{margin-top:10px}
+.cur button.on[data-v=“HKD”]{background:var(–hkd);color:#fff}
+.cur button.on[data-v=“CNY”]{background:var(–cny);color:var(–ink)}
+
+.amountRow{display:flex;align-items:baseline;gap:10px;margin-top:20px}
+.amountRow span{font-size:26px;font-weight:700;color:var(–hkd-lt);font-family:var(–num)}
+body.cny .amountRow span{color:var(–cny)}
+#amount{width:100%;border:0;border-bottom:2px solid rgba(255,255,255,.22);background:transparent;color:#fff;font-size:52px;font-weight:700;padding:0 0 8px;border-radius:0;outline:none;caret-color:var(–hkd-lt)}
+#amount::placeholder{color:rgba(255,255,255,.28)}
+#amount:focus{border-bottom-color:var(–hkd-lt)}
+body.cny #amount:focus{border-bottom-color:var(–cny)}
+#rateRow{margin-top:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;color:rgba(255,255,255,.75)}
+#rateRow input{width:96px;border:1px solid rgba(255,255,255,.28);border-radius:9px;padding:6px 8px;background:rgba(255,255,255,.1);color:#fff;font-family:var(–num)}
+#conv{width:100%;color:var(–cny);font-weight:700;font-size:18px;font-family:var(–num)}
+
+/* body */
+.body{padding:20px 16px 0}
+.lbl{font-size:14px;color:var(–mut);margin:0 0 8px;font-weight:600}
+.block{margin-top:20px}
+#chips,#quick{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(–line);background:var(–sf);border-radius:999px;padding:9px 15px 9px 12px;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:var(–c,#999);flex:none}
+.chip.on{background:var(–ink);border-color:var(–ink);color:#fff}
+.txt{display:block;width:100%;border:1px solid var(–line);border-radius:12px;padding:12px;background:var(–sf);min-height:46px}
+#quick{margin-top:10px}
+.q{border:1px solid transparent;background:#E9ECF3;background:color-mix(in srgb,var(–c,#667089) 14%,#fff);border-radius:999px;padding:7px 14px;font-weight:600;font-size:15px}
+.q.on{background:var(–c,var(–ink));color:#fff}
+.q.add{background:transparent;border:1px dashed #A4ABC0;color:var(–mut);font-weight:500}
+.primary{width:100%;margin-top:24px;border:0;border-radius:16px;background:var(–hkd);color:#fff;font-weight:800;font-size:18px;padding:16px;letter-spacing:.06em}
+body.cny .primary{background:var(–cny);color:var(–ink)}
+.ghost{border:1px solid var(–line);background:var(–sf);border-radius:12px;padding:10px 14px;font-weight:600}
+.danger{border:1px solid #E7B9B9;background:#fff;color:var(–bad);border-radius:12px;padding:10px 14px;font-weight:600}
+#editBar{display:flex;gap:10px;margin-top:12px}
+#editBar button{flex:1}
+
+/* report */
+.nav{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0}
+.nav .lab{font-weight:700;font-size:17px;text-align:center;flex:1}
+.nav button{border:0;background:rgba(255,255,255,.12);color:#fff;width:42px;height:42px;border-radius:50%;font-size:22px;line-height:1}
+.today{display:block;margin:4px auto 0;border:0;background:none;color:var(–cny);font-weight:700;padding:6px}
+.k2{font-size:14px;color:rgba(255,255,255,.7);margin-top:16px}
+.big{font-size:44px;font-weight:800;line-height:1.1;margin-top:2px}
+.trio{display:flex;gap:28px;margin-top:12px}
+.trio span{display:block;font-size:13px;color:rgba(255,255,255,.7)}
+.trio b{font-family:var(–num);font-variant-numeric:tabular-nums;font-size:18px}
+.note{margin-top:12px;font-size:14px;color:var(–cny)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:84px;margin-top:20px}
+.col{flex:1;height:100%;display:flex;align-items:flex-end;min-width:0}
+.bar{width:100%;border:0;background:var(–hkd-lt);border-radius:4px 4px 0 0;padding:0;min-height:3px}
+.bar.zero{background:rgba(255,255,255,.18)}
+.axis{display:flex;gap:3px;margin-top:5px}
+.axis span{flex:1;height:14px;position:relative}
+.axis i{position:absolute;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;color:rgba(255,255,255,.65);white-space:nowrap}
+
+.panel{background:var(–sf);border-radius:20px;padding:16px;margin-bottom:14px}
+h2{font-size:16px;margin:0 0 12px;font-weight:700}
+.ribbon{display:flex;gap:3px;height:16px;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.ribbon i{display:block;min-width:4px}
+.lg{display:flex;align-items:center;gap:10px;padding:7px 0}
+.lg .n{flex:1;font-weight:600}
+.lg .p{color:var(–mut);font-size:14px;min-width:38px;text-align:right}
+.lg .a{min-width:96px;text-align:right;font-family:var(–num);font-variant-numeric:tabular-nums;font-weight:700}
+.gh{display:flex;justify-content:space-between;font-size:13px;color:var(–mut);margin:16px 0 2px;font-weight:600}
+.gh:first-of-type{margin-top:0}
+.row{display:flex;width:100%;align-items:center;gap:12px;text-align:left;border:0;background:transparent;padding:10px 0;border-bottom:1px solid #EEF0F5}
+.row:last-child{border-bottom:0}
+.ic{width:38px;height:38px;border-radius:50%;background:var(–c,#667089);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.rc{flex:1;min-width:0}
+.rc b{display:block;font-weight:700}
+.rc i{display:block;font-style:normal;font-size:13px;color:var(–mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ra{text-align:right;font-family:var(–num);font-variant-numeric:tabular-nums}
+.ra b{display:block;font-weight:700}
+.ra i{display:block;font-style:normal;font-size:12px;color:#8A5A00}
+.ra.income b{color:var(–inc)}
+.empty{color:var(–mut);text-align:center;padding:18px 8px}
+
+/* settings */
+.line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.line input,.add input{border:1px solid var(–line);border-radius:10px;padding:9px 10px;background:#fff}
+.line input{width:110px;font-family:var(–num)}
+.help{font-size:13px;color:var(–mut);margin-top:10px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(–line);border-radius:999px;padding:5px 6px 5px 12px;background:#fff;font-size:15px}
+.tag button{border:0;background:#E9ECF3;border-radius:50%;width:22px;height:22px;line-height:1;padding:0;color:var(–mut)}
+.add{display:flex;gap:8px}
+.add input{flex:1;min-width:0}
+.pick .chip{padding:7px 12px 7px 10px;font-size:15px}
+
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(–line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar div{max-width:520px;margin:0 auto;display:flex}
+.tabbar button{flex:1;border:0;background:transparent;padding:9px 4px 8px;color:#7C849C;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabbar svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:var(–hkd)}
+#toast{white-space:pre-line;position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(–ink);color:#fff;border-radius:12px;padding:11px 18px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center;box-shadow:0 6px 20px rgba(28,32,56,.3)}
+#toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+
+</head>
+<body>
+<div id="app">
+  <div id="banner" hidden>目前無法儲存資料，關掉頁面後記錄會消失。請把這個檔案放到網址上，用手機瀏覽器開啟。</div>
+
+  <section id="tab-add">
+    <div class="hero">
+      <div class="heroTop"><h1 id="title">記帳</h1><div class="sub num" id="sub"></div></div>
+      <div class="seg" id="typeSeg" role="group" aria-label="類型">
+        <button data-v="expense" class="on">支出</button><button data-v="income">收入</button>
+      </div>
+      <div class="seg cur" id="curSeg" role="group" aria-label="幣別">
+        <button data-v="HKD" class="on">港幣 HK$</button><button data-v="CNY">人民幣 ¥</button>
+      </div>
+      <div class="amountRow"><span id="sym">HK$</span>
+        <input id="amount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" autocomplete="off" aria-label="金額"></div>
+      <div id="rateRow" hidden>
+        <span>匯率 1 人民幣 =</span><input id="rate" type="number" inputmode="decimal" step="0.0001" aria-label="匯率"><span>港幣</span>
+        <div id="conv">折合 HK$0.00</div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="lbl">分類</div>
+      <div id="chips"></div>
+      <div class="block">
+        <div class="lbl">備註</div>
+        <input class="txt" type="text" id="note" placeholder="選填，或點下面的常用備註" autocomplete="off">
+        <div id="quick"></div>
+      </div>
+      <div class="block">
+        <div class="lbl">日期</div>
+        <input class="txt" type="date" id="date">
+      </div>
+      <button class="primary" id="save">記一筆</button>
+      <div id="editBar" hidden><button class="danger" id="del">刪除這筆</button><button class="ghost" id="cancel">取消修改</button></div>
+    </div>
+  </section>
+
+  <section id="tab-report" hidden></section>
+
+  <section id="tab-settings" hidden>
+    <div class="hero"><div class="heroTop" style="margin:0"><h1>設定</h1></div></div>
+    <div class="body" id="setBody"></div>
+  </section>
+</div>
+
+<nav class="tabbar" aria-label="主選單"><div>
+  <button data-tab="add" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>記帳</button>
+  <button data-tab="report"><svg viewBox="0 0 24 24"><path d="M5 20v-9M12 20V4M19 20v-6"/></svg>報表</button>
+  <button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>設定</button>
+</div></nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="file" accept=".csv,text/csv" hidden>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const startOfWeek = d => { const x = new Date(d); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); x.setHours(0, 0, 0, 0); return x; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const round2 = n => Math.round(n * 100) / 100;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const hk = n => 'HK$' + fmt(n);
+const cn = n => '¥' + fmt(n);
+const WD = ['日', '一', '二', '三', '四', '五', '六'];
+
+const CAT_COLORS = { '餐飲': '#C2570C', '交通': '#2563EB', '購物': '#BE185D', '居住': '#0F766E', '娛樂': '#7C3AED', '醫療': '#B91C1C', '其他': '#64748B', '薪資': '#15803D', '其他收入': '#0E7490' };
+const EXTRA = ['#9333EA', '#0369A1', '#A16207', '#BE123C', '#4D7C0F', '#6D28D9'];
+const colorOf = c => CAT_COLORS[c] || EXTRA[[...String(c)].reduce((s, ch) => s + ch.charCodeAt(0), 0) % EXTRA.length];
+
+/* ---------- storage (falls back to memory if the browser blocks it) ---------- */
+const store = (() => {
+  const mem = {}; let ok = true;
+  try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); } catch (e) { ok = false; }
+  return {
+    get persistent() { return ok; },
+    get(k, d) {
+      try { if (ok) { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } } catch (e) {}
+      return k in mem ? mem[k] : d;
+    },
+    set(k, v) {
+      mem[k] = v;
+      if (ok) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { ok = false; $('banner').hidden = false; } }
+    }
+  };
+})();
+if (!store.persistent) $('banner').hidden = false;
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+
+/* ---------- data ---------- */
+const DEFAULT_CATS = {
+  expense: ['餐飲', '交通', '購物', '居住', '娛樂', '醫療', '其他'],
+  income: ['薪資', '其他收入']
+};
+let entries = store.get('ledger.entries', []);
+let settings = Object.assign({ rate: 1.10, rateUpdated: null, cats: DEFAULT_CATS, quick: { '交通': ['上下學'] }, dismissed: [] }, store.get('ledger.settings', {}));
+const saveEntries = () => store.set('ledger.entries', entries);
+const saveSettings = () => store.set('ledger.settings', settings);
+
+/* ---------- helpers ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function mark(seg, v) {
+  seg.querySelectorAll('button').forEach(b => { const on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+}
+const sumHkd = a => a.reduce((s, e) => s + e.hkd, 0);
+
+/* ---------- entry form ---------- */
+const form = { type: 'expense', cur: 'HKD', cat: '', editId: null };
+
+function renderChips() {
+  const list = settings.cats[form.type].slice();
+  if (form.cat && !list.includes(form.cat)) list.push(form.cat);
+  $('chips').innerHTML = list.map(c => `<button class="chip${c === form.cat ? ' on' : ''}" data-c="${esc(c)}" aria-pressed="${c === form.cat}"><span class="dot" style="--c:${colorOf(c)}"></span>${esc(c)}</button>`).join('');
+  renderQuick();
+}
+function renderQuick() {
+  const note = $('note').value.trim();
+  const list = (form.cat && settings.quick[form.cat]) || [];
+  let h = list.map(q => `<button class="q${q === note ? ' on' : ''}" style="--c:${colorOf(form.cat)}" data-q="${esc(q)}">${esc(q)}</button>`).join('');
+  if (form.cat && note && !list.includes(note)) h += `<button class="q add" data-qadd="1">＋ 存為「${esc(form.cat)}」常用備註</button>`;
+  $('quick').innerHTML = h;
+  $('quick').hidden = !h;
+}
+function updateConv() {
+  if (form.cur !== 'CNY') return;
+  const a = parseFloat($('amount').value) || 0, r = parseFloat($('rate').value) || 0;
+  $('conv').textContent = '折合 ' + hk(a * r);
+}
+function setType(t) { form.type = t; form.cat = ''; mark($('typeSeg'), t); renderChips(); }
+function setCur(c) {
+  form.cur = c; mark($('curSeg'), c);
+  $('sym').textContent = c === 'HKD' ? 'HK$' : '¥';
+  document.body.classList.toggle('cny', c === 'CNY');
+  $('rateRow').hidden = c === 'HKD';
+  if (c === 'CNY' && !form.editId) $('rate').value = settings.rate;
+  updateConv();
+}
+function updateSub() {
+  if ($('tab-add').hidden) return;
+  if (form.editId) { $('sub').textContent = '正在修改'; return; }
+  const today = ymd(new Date());
+  const t = sumHkd(entries.filter(e => e.type === 'expense' && e.date === today));
+  $('sub').textContent = '今日支出 ' + hk(t);
+}
+function resetForm() {
+  form.editId = null; $('amount').value = ''; $('note').value = '';
+  $('date').value = ymd(new Date());
+  $('save').textContent = '記一筆'; $('editBar').hidden = true; $('title').textContent = '記帳';
+  if (form.cur === 'CNY') $('rate').value = settings.rate;
+  updateConv(); updateSub(); renderQuick();
+}
+function saveEntry() {
+  const amt = parseFloat($('amount').value);
+  if (!(amt > 0)) { toast('請輸入大於 0 的金額'); return; }
+  let rate = 1;
+  if (form.cur === 'CNY') { rate = parseFloat($('rate').value); if (!(rate > 0)) { toast('請輸入匯率'); return; } }
+  if (!form.cat) { toast('請選擇分類'); return; }
+  const e = {
+    id: form.editId || uid(), type: form.type, cur: form.cur, amount: round2(amt), rate,
+    hkd: round2(amt * rate), cat: form.cat, note: $('note').value.trim(),
+    date: $('date').value || ymd(new Date())
+  };
+  const i = entries.findIndex(x => x.id === e.id);
+  if (i >= 0) entries[i] = e; else entries.push(e);
+  saveEntries();
+  const wasEdit = !!form.editId, keepDate = $('date').value;
+  const auto = autoQuick(e);
+  resetForm();
+  if (!wasEdit && keepDate) $('date').value = keepDate;
+  toast((wasEdit ? '已更新 ' : '已記錄 ') + (e.cur === 'CNY' ? cn(e.amount) + '（' + hk(e.hkd) + '）' : hk(e.hkd))
+    + (auto ? `\n「${e.note}」已加入「${e.cat}」常用備註` : ''));
+}
+const AUTO_QUICK_AT = 5;
+function autoQuick(e) {
+  if (!e.note) return false;
+  const l = settings.quick[e.cat] = settings.quick[e.cat] || [];
+  if (l.includes(e.note) || settings.dismissed.includes(e.cat + '|' + e.note)) return false;
+  const n = entries.filter(x => x.cat === e.cat && x.note === e.note).length;
+  if (n < AUTO_QUICK_AT) return false;
+  l.push(e.note); saveSettings();
+  return true;
+}
+function startEdit(id) {
+  const e = entries.find(x => x.id === id); if (!e) return;
+  form.editId = id; form.type = e.type; form.cat = e.cat; mark($('typeSeg'), e.type);
+  $('note').value = e.note || '';
+  setCur(e.cur); renderChips();
+  if (e.cur === 'CNY') $('rate').value = e.rate;
+  $('amount').value = e.amount; $('date').value = e.date;
+  $('save').textContent = '更新'; $('editBar').hidden = false; $('title').textContent = '修改帳目';
+  updateConv(); showTab('add');
+}
+function deleteEntry() {
+  if (!form.editId) return;
+  if (!confirm('確定刪除這筆帳目？')) return;
+  entries = entries.filter(x => x.id !== form.editId);
+  saveEntries(); resetForm(); toast('已刪除');
+}
+
+/* ---------- reports ---------- */
+const rep = { mode: 'day', anchor: new Date() };
+function range() {
+  const a = new Date(rep.anchor); a.setHours(0, 0, 0, 0);
+  if (rep.mode === 'day') return [a, a];
+  if (rep.mode === 'week') { const s = startOfWeek(a); return [s, addDays(s, 6)]; }
+  return [new Date(a.getFullYear(), a.getMonth(), 1), new Date(a.getFullYear(), a.getMonth() + 1, 0)];
+}
+function shift(n) {
+  const a = new Date(rep.anchor);
+  if (rep.mode === 'day') a.setDate(a.getDate() + n);
+  else if (rep.mode === 'week') a.setDate(a.getDate() + 7 * n);
+  else { a.setDate(1); a.setMonth(a.getMonth() + n); }
+  rep.anchor = a;
+}
+function rangeLabel(f, t) {
+  if (rep.mode === 'day') return `${f.getFullYear()}年${f.getMonth() + 1}月${f.getDate()}日 週${WD[f.getDay()]}`;
+  if (rep.mode === 'week') return `${f.getMonth() + 1}月${f.getDate()}日 至 ${t.getMonth() + 1}月${t.getDate()}日`;
+  return `${f.getFullYear()}年${f.getMonth() + 1}月`;
+}
+function renderReport() {
+  const [f, t] = range(), fs = ymd(f), ts = ymd(t), todayS = ymd(new Date());
+  const list = entries.filter(e => e.date >= fs && e.date <= ts);
+  const exp = list.filter(e => e.type === 'expense'), inc = list.filter(e => e.type === 'income');
+  const E = sumHkd(exp), I = sumHkd(inc), net = I - E;
+  const cny = exp.filter(e => e.cur === 'CNY');
+  const isCurrent = todayS >= fs && todayS <= ts;
+  const unit = { day: '日', week: '週', month: '月' }[rep.mode];
+
+  let h = `<div class="hero"><div class="heroTop"><h1>報表</h1></div>
+    <div class="seg" id="modeSeg">${[['day', '日'], ['week', '週'], ['month', '月']].map(([v, n]) => `<button data-mode="${v}" class="${rep.mode === v ? 'on' : ''}">${n}</button>`).join('')}</div>
+    <div class="nav"><button data-nav="-1" aria-label="上一${unit}">‹</button><div class="lab">${rangeLabel(f, t)}</div><button data-nav="1" aria-label="下一${unit}">›</button></div>`;
+  if (!isCurrent) h += `<button class="today" data-nav="today">回到本${unit}</button>`;
+  h += `<div class="k2">支出（港幣）</div><div class="big">${hk(E)}</div>
+    <div class="trio"><div><span>收入</span><b>${hk(I)}</b></div><div><span>結餘</span><b>${net < 0 ? '−' : ''}${hk(Math.abs(net))}</b></div></div>`;
+  if (cny.length) h += `<div class="note">含人民幣支出 ${cn(cny.reduce((s, e) => s + e.amount, 0))}，已折合 ${hk(sumHkd(cny))}</div>`;
+
+  if (rep.mode !== 'day') {
+    const days = []; for (let d = new Date(f); d <= t; d = addDays(d, 1)) days.push(new Date(d));
+    const per = days.map(d => sumHkd(exp.filter(e => e.date === ymd(d))));
+    const mx = Math.max(...per, 1);
+    h += `<div class="bars">${days.map((d, i) =>
+      `<div class="col"><button class="bar${per[i] ? '' : ' zero'}" data-d="${ymd(d)}" style="height:${per[i] ? Math.max(per[i] / mx * 100, 5) : 3}%" aria-label="${d.getMonth() + 1}月${d.getDate()}日 ${hk(per[i])}"></button></div>`).join('')}</div>
+      <div class="axis">${days.map((d, i) => {
+        const txt = rep.mode === 'week' ? WD[d.getDay()] : ((d.getDate() - 1) % 5 === 0 || i === days.length - 1 ? d.getDate() : '');
+        return `<span><i>${txt}</i></span>`;
+      }).join('')}</div>`;
+  }
+  h += '</div><div class="body">';
+
+  const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + e.hkd);
+  const cats = Object.entries(by).sort((a, b) => b[1] - a[1]);
+  h += '<div class="panel"><h2>支出分類</h2>';
+  if (cats.length) {
+    h += `<div class="ribbon">${cats.map(([c, v]) => `<i style="flex:${v};background:${colorOf(c)}"></i>`).join('')}</div>`;
+    h += cats.map(([c, v]) => `<div class="lg"><span class="dot" style="--c:${colorOf(c)}"></span><span class="n">${esc(c)}</span><span class="p">${Math.round(v / E * 100)}%</span><span class="a">${hk(v)}</span></div>`).join('');
+  } else h += '<div class="empty">這段時間沒有支出</div>';
+  h += '</div>';
+
+  h += '<div class="panel"><h2>明細</h2>';
+  if (!list.length) h += '<div class="empty">還沒有記錄。到「記帳」記下第一筆。</div>';
+  else {
+    [...new Set(list.map(e => e.date))].sort().reverse().forEach(ds => {
+      const items = list.filter(e => e.date === ds).sort((a, b) => b.id < a.id ? -1 : 1);
+      if (rep.mode !== 'day') {
+        const d = new Date(ds + 'T00:00:00');
+        h += `<div class="gh"><span>${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ${hk(sumHkd(items.filter(e => e.type === 'expense')))}</span></div>`;
+      }
+      items.forEach(e => {
+        const sign = e.type === 'expense' ? '−' : '+';
+        h += `<button class="row" data-id="${e.id}"><span class="ic" style="--c:${colorOf(e.cat)}">${esc([...e.cat][0])}</span>
+          <span class="rc"><b>${esc(e.cat)}</b>${e.note ? `<i>${esc(e.note)}</i>` : ''}</span>
+          <span class="ra ${e.type}"><b>${sign}${e.cur === 'CNY' ? cn(e.amount) : hk(e.amount)}</b>${e.cur === 'CNY' ? `<i>${hk(e.hkd)}（匯率 ${e.rate}）</i>` : ''}</span></button>`;
+      });
+    });
+  }
+  h += '</div></div>';
+  $('tab-report').innerHTML = h;
+}
+
+/* ---------- settings ---------- */
+let qSel = null;
+function renderSettings() {
+  const upd = settings.rateUpdated ? new Date(settings.rateUpdated).toLocaleString('zh-HK', { hour12: false }) : '尚未自動更新';
+  const tags = t => settings.cats[t].map(c => `<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>`).join('');
+  const allCats = settings.cats.expense.concat(settings.cats.income);
+  if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
+  const qs = settings.quick[qSel] || [];
+  $('setBody').innerHTML = `
+  <div class="panel"><h2>匯率（人民幣 → 港幣）</h2>
+    <div class="line"><span>1 人民幣 =</span><input id="setRate" type="number" inputmode="decimal" step="0.0001" value="${settings.rate}"><span>港幣</span>
+    <button class="ghost" data-act="fetchRate">自動更新</button></div>
+    <div class="help">最後更新：${upd}。新記帳會鎖定記錄當下的匯率，之前的帳目不會改變。</div></div>
+  <div class="panel"><h2>常用備註</h2>
+    <div class="help" style="margin:0 0 10px">選一個分類，替它加上常用備註。記帳時選了該分類，就會出現可一鍵點選的備註。同一個備註在同一分類用滿 5 次，也會自動加進來。</div>
+    <div class="tags pick">${allCats.map(c => `<button class="chip${c === qSel ? ' on' : ''}" data-act="qsel" data-c="${esc(c)}"><span class="dot" style="--c:${colorOf(c)}"></span>${esc(c)}</button>`).join('')}</div>
+    <div class="tags">${qs.length ? qs.map(q => `<span class="tag">${esc(q)}<button data-act="qdel" data-q="${esc(q)}" aria-label="刪除 ${esc(q)}">×</button></span>`).join('') : '<span class="help" style="margin:0">「' + esc(qSel) + '」還沒有常用備註</span>'}</div>
+    <div class="add"><input id="newq" placeholder="例如：上下學" maxlength="12"><button class="ghost" data-act="qadd">新增</button></div></div>
+  <div class="panel"><h2>分類</h2><div class="lbl" style="margin:0">支出</div><div class="tags">${tags('expense')}</div>
+    <div class="add"><input id="newcat-expense" placeholder="新增支出分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="expense">新增</button></div>
+    <div class="lbl" style="margin:18px 0 0">收入</div><div class="tags">${tags('income')}</div>
+    <div class="add"><input id="newcat-income" placeholder="新增收入分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="income">新增</button></div></div>
+  <div class="panel"><h2>備份</h2><div class="help" style="margin:0 0 12px">目前共 ${entries.length} 筆。資料只存在這支手機的瀏覽器裡，請定期匯出備份。</div>
+    <div class="line"><button class="ghost" data-act="export">匯出 CSV</button><button class="ghost" data-act="import">匯入 CSV</button></div></div>
+  <div class="panel"><h2>清除資料</h2><button class="danger" data-act="clear">清除所有帳目</button></div>`;
+}
+async function fetchRate(manual) {
+  try {
+    const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 6000);
+    const r = await fetch('https://open.er-api.com/v6/latest/CNY', { signal: ctrl.signal }); clearTimeout(tm);
+    const j = await r.json(); const v = j && j.rates && j.rates.HKD;
+    if (v > 0) {
+      settings.rate = Math.round(v * 10000) / 10000; settings.rateUpdated = Date.now(); saveSettings();
+      if (form.cur === 'CNY' && !form.editId) { $('rate').value = settings.rate; updateConv(); }
+      if (!$('tab-settings').hidden) renderSettings();
+      if (manual) toast('匯率已更新：1 人民幣 = ' + settings.rate + ' 港幣');
+      return;
+    }
+  } catch (e) {}
+  if (manual) toast('無法取得匯率，請手動輸入');
+}
+
+/* ---------- CSV ---------- */
+const csvCell = v => { const s = String(v == null ? '' : v); return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+function exportCsv() {
+  const head = ['date', 'type', 'currency', 'amount', 'rate_to_hkd', 'hkd', 'category', 'note'];
+  const rows = entries.slice().sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0)
+    .map(e => [e.date, e.type, e.cur, e.amount, e.rate, e.hkd, e.cat, e.note]);
+  const csv = '\ufeff' + [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'ledger-' + ymd(new Date()).replace(/-/g, '') + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+function parseCsv(text) {
+  text = text.replace(/^\ufeff/, ''); const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); cell = ''; rows.push(row); row = []; }
+    else cell += c;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x !== ''));
+}
+function importCsv(text) {
+  const rows = parseCsv(text); if (rows.length < 2) { toast('檔案沒有資料'); return; }
+  const h = rows[0].map(x => x.trim().toLowerCase()); const col = n => h.indexOf(n);
+  if (col('date') < 0 || col('amount') < 0) { toast('格式不符，請使用本工具匯出的 CSV'); return; }
+  const key = e => [e.date, e.type, e.cur, e.amount, e.cat, e.note].join('|');
+  const have = new Set(entries.map(key)); let added = 0, skipped = 0;
+  rows.slice(1).forEach(r => {
+    const g = n => (col(n) >= 0 ? r[col(n)] : '') || '';
+    const type = g('type') === 'income' ? 'income' : 'expense';
+    const cur = g('currency') === 'CNY' ? 'CNY' : 'HKD';
+    const amount = round2(parseFloat(g('amount')));
+    const rate = cur === 'HKD' ? 1 : parseFloat(g('rate_to_hkd')) || settings.rate;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(g('date')) || !(amount > 0)) { skipped++; return; }
+    const e = { id: uid(), type, cur, amount, rate, hkd: round2(amount * rate), cat: g('category') || '其他', note: g('note'), date: g('date') };
+    if (have.has(key(e))) { skipped++; return; }
+    have.add(key(e)); entries.push(e); added++;
+    if (!settings.cats[type].includes(e.cat)) settings.cats[type].push(e.cat);
+  });
+  saveEntries(); saveSettings(); renderChips(); renderSettings(); updateSub();
+  toast(`匯入 ${added} 筆，略過 ${skipped} 筆`);
+}
+
+/* ---------- navigation & events ---------- */
+function showTab(name) {
+  ['add', 'report', 'settings'].forEach(n => $('tab-' + n).hidden = n !== name);
+  document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  if (name === 'report') renderReport();
+  if (name === 'settings') renderSettings();
+  updateSub();
+  window.scrollTo(0, 0);
+}
+document.querySelector('.tabbar').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showTab(b.dataset.tab); });
+$('typeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setType(b.dataset.v); });
+$('curSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCur(b.dataset.v); });
+$('amount').addEventListener('input', updateConv);
+$('rate').addEventListener('input', updateConv);
+$('note').addEventListener('input', renderQuick);
+$('chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { form.cat = b.dataset.c; renderChips(); } });
+$('quick').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.qadd) {
+    const note = $('note').value.trim();
+    if (!form.cat || !note) return;
+    (settings.quick[form.cat] = settings.quick[form.cat] || []).push(note);
+    settings.dismissed = settings.dismissed.filter(k => k !== form.cat + '|' + note); saveSettings();
+    toast('已加入「' + form.cat + '」常用備註');
+  } else if (b.dataset.q) {
+    $('note').value = $('note').value.trim() === b.dataset.q ? '' : b.dataset.q;
+  }
+  renderQuick();
+});
+$('save').addEventListener('click', saveEntry);
+$('del').addEventListener('click', deleteEntry);
+$('cancel').addEventListener('click', resetForm);
+
+$('tab-report').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.mode) { rep.mode = b.dataset.mode; renderReport(); }
+  else if (b.dataset.nav) { if (b.dataset.nav === 'today') rep.anchor = new Date(); else shift(+b.dataset.nav); renderReport(); }
+  else if (b.dataset.d) { rep.mode = 'day'; rep.anchor = new Date(b.dataset.d + 'T00:00:00'); renderReport(); window.scrollTo(0, 0); }
+  else if (b.dataset.id) startEdit(b.dataset.id);
+});
+$('tab-settings').addEventListener('change', e => {
+  if (e.target.id === 'setRate') {
+    const v = parseFloat(e.target.value);
+    if (v > 0) { settings.rate = v; saveSettings(); toast('匯率已儲存'); } else e.target.value = settings.rate;
+  }
+});
+$('tab-settings').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const act = b.dataset.act, t = b.dataset.t;
+  if (act === 'fetchRate') fetchRate(true);
+  else if (act === 'export') { if (!entries.length) toast('還沒有帳目可匯出'); else exportCsv(); }
+  else if (act === 'import') $('file').click();
+  else if (act === 'qsel') { qSel = b.dataset.c; renderSettings(); }
+  else if (act === 'qadd') {
+    const v = $('newq').value.trim(); if (!v) return;
+    const l = settings.quick[qSel] = settings.quick[qSel] || [];
+    if (l.includes(v)) { toast('已經有這個備註'); return; }
+    l.push(v); settings.dismissed = settings.dismissed.filter(k => k !== qSel + '|' + v); saveSettings(); renderSettings(); renderQuick();
+  } else if (act === 'qdel') {
+    settings.quick[qSel] = (settings.quick[qSel] || []).filter(q => q !== b.dataset.q);
+    settings.dismissed.push(qSel + '|' + b.dataset.q); saveSettings(); renderSettings(); renderQuick();
+  } else if (act === 'addcat') {
+    const v = $('newcat-' + t).value.trim(); if (!v) return;
+    if (settings.cats[t].includes(v)) { toast('分類已存在'); return; }
+    settings.cats[t].push(v); saveSettings(); renderSettings(); renderChips();
+  } else if (act === 'delcat') {
+    if (settings.cats[t].length <= 1) { toast('至少要保留一個分類'); return; }
+    settings.cats[t] = settings.cats[t].filter(c => c !== b.dataset.c); saveSettings(); renderSettings(); renderChips();
+  } else if (act === 'clear') {
+    if (confirm(`確定清除全部 ${entries.length} 筆帳目？此操作無法還原，建議先匯出 CSV。`)) {
+      entries = []; saveEntries(); renderSettings(); updateSub(); toast('已清除');
+    }
+  }
+});
+$('file').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = '';
+});
+
+/* ---------- init ---------- */
+$('date').value = ymd(new Date());
+setType('expense'); setCur('HKD'); updateSub();
+if (!settings.rateUpdated || Date.now() - settings.rateUpdated > 6 * 3600 * 1000) fetchRate(false);
+})();
+</script>
+
+</body>
+</html>
