@@ -32,7 +32,7 @@ button:active{transform:scale(0.98);transition:transform .08s ease}
 h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.04em}
 .sub{font-size:13px;color:rgba(255,255,255,.72);text-align:right}
 #banner{margin:12px 16px 0;background:#FFF1CC;color:#4A3A00;border-radius:12px;padding:10px 12px;font-size:14px}
-/* A3 每月預算雙軌進度條 (無壓莫蘭迪柔色調) /
+/* A3 每月預算雙軌進度條 (無壓莫蘭迪柔色調) */
 .budgetTrackCard{
 margin:10px 0 16px;
 background:rgba(255,255,255,0.08);
@@ -75,7 +75,6 @@ border-radius:999px;
 transition:width .6s cubic-bezier(.2,.8,.3,1),background-color .4s ease;
 background:#8FB7A0;
 }
-/ 低飽和無壓漸變色 */
 .bFill.safe{background:linear-gradient(90deg,#89B6A5,#A5C9B3)}
 .bFill.mid{background:linear-gradient(90deg,#97B0C4,#BAC9D8)}
 .bFill.soft-warn{background:linear-gradient(90deg,#DEC5A5,#E7B898)}
@@ -368,7 +367,7 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 <div class="budgetTrackCard" id="bCard" hidden>
 <div class="bHead">
 <span>本月預算進度</span>
-<span><b id="bSpentVal">HK0</b> / <span id="bLimitVal">HK0</span></span>
+<span><b id="bSpentVal">HK￼0</span></span>
 </div>
 <div class="bTrackWrap">
 <div class="bCursor" id="bTimeCursor">
@@ -462,7 +461,8 @@ if (!deferredPrompt) return;
 deferredPrompt.prompt();
 const { outcome } = await deferredPrompt.userChoice;
 deferredPrompt = null;
-document.getElementById('installPrompt').classList.remove('active');
+const p = document.getElementById('installPrompt');
+if (p) p.classList.remove('active');
 });
 }
 window.addEventListener('appinstalled', () => {
@@ -489,7 +489,7 @@ const CAT_COLORS = {
 '居住': '#0F766E', '購物': '#BE185D', '娛樂': '#7C3AED'
 };
 const EXTRA = ['#9333EA', '#0369A1', '#A16207', '#BE123C', '#4D7C0F', '#6D28D9'];
-const colorOf = c => CAT_COLORS[c] || EXTRA[[...String(c)].reduce((s, ch) => s + ch.charCodeAt(0), 0) % EXTRA.length];
+const colorOf = c => CAT_COLORS[c] || EXTRA[[...String(c || '')].reduce((s, ch) => s + ch.charCodeAt(0), 0) % EXTRA.length];
 /* ---------- storage ---------- */
 const store = (() => {
 const mem = {}; let ok = true;
@@ -502,11 +502,11 @@ return k in mem ? mem[k] : d;
 },
 set(k, v) {
 mem[k] = v;
-if (ok) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { ok = false; $('banner').hidden = false; } }
+if (ok) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { ok = false; const b = $('banner'); if (b) b.hidden = false; } }
 }
 };
 })();
-if (!store.persistent) $('banner').hidden = false;
+if (!store.persistent && $('banner')) $('banner').hidden = false;
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 /* ---------- data ---------- */
 const DEFAULT_CATS = {
@@ -516,8 +516,10 @@ income: ['薪資', '其他收入']
 const OLD_CATS = ['居住', '購物', '娛樂'];
 const NEW_EXP = ['日常用品', '服飾裝扮', '娛樂愛好', '外出消遣'];
 const BASE_CATS = DEFAULT_CATS.expense.concat(DEFAULT_CATS.income, OLD_CATS);
-let entries = store.get('ledger.entries', []);
-/* 統一匯率基準：1 港幣 = rate 人民幣 (例如 0.8553) */
+let rawEntries = store.get('ledger.entries', []);
+let entries = Array.isArray(rawEntries) ? rawEntries.filter(e => e && typeof e === 'object') : [];
+let rawSettings = store.get('ledger.settings', {});
+if (!rawSettings || typeof rawSettings !== 'object' || Array.isArray(rawSettings)) rawSettings = {};
 let settings = Object.assign({
 rate: 0.8553,
 rateUpdated: null,
@@ -531,19 +533,37 @@ ach: {},
 achSeen: 0,
 noSpend: [],
 flags: {}
-}, store.get('ledger.settings', {}));
+}, rawSettings);
+/* 舊資料容錯清洗，防止結構不一致導致 script 報錯中斷 */
+if (Array.isArray(settings.cats)) {
+settings.cats = {
+expense: settings.cats.slice(),
+income: ['薪資', '其他收入']
+};
+}
+if (!settings.cats || typeof settings.cats !== 'object') {
+settings.cats = JSON.parse(JSON.stringify(DEFAULT_CATS));
+}
+if (!Array.isArray(settings.cats.expense)) {
+settings.cats.expense = JSON.parse(JSON.stringify(DEFAULT_CATS.expense));
+}
+if (!Array.isArray(settings.cats.income)) {
+settings.cats.income = JSON.parse(JSON.stringify(DEFAULT_CATS.income));
+}
+if (!Array.isArray(settings.noSpend)) settings.noSpend = [];
+if (!Array.isArray(settings.dismissed)) settings.dismissed = [];
+if (!settings.quick || typeof settings.quick !== 'object' || Array.isArray(settings.quick)) settings.quick = { '交通': ['上下學', '搭地鐵'] };
+if (!settings.ach || typeof settings.ach !== 'object' || Array.isArray(settings.ach)) settings.ach = {};
+if (!settings.flags || typeof settings.flags !== 'object' || Array.isArray(settings.flags)) settings.flags = {};
 if (settings.rate > 1) {
 settings.rate = Math.round((1 / settings.rate) * 1e4) / 1e4;
 }
 settings.base = 'HKD';
 const saveEntries = () => store.set('ledger.entries', entries);
 const saveSettings = () => store.set('ledger.settings', settings);
-const base = () => 'HKD';
-const other = () => 'CNY';
 const sym = c => c === 'CNY' ? '¥' : 'HK$';
-const cname = c => c === 'CNY' ? '人民幣' : '港幣';
 const money = (n, c) => sym(c || 'HKD') + fmt(n);
-const val = (e) => e.hkd;
+const val = (e) => e.hkd || 0;
 const sumBase = a => a.reduce((s, e) => s + (e.hkd || 0), 0);
 const dual = (amt, cur, r) => {
 if (cur === 'HKD') {
@@ -555,6 +575,7 @@ return { cny: round2(amt), hkd: round2(amt / r) };
 (() => {
 let es = false, ss = false;
 entries.forEach(e => {
+if (!e.date) e.date = ymd(new Date());
 if (e.hkd == null) {
 if (e.cur === 'HKD') {
 e.hkd = e.amount;
@@ -581,10 +602,12 @@ if (ss) saveSettings();
 /* ---------- helpers ---------- */
 let toastTimer;
 function toast(msg) {
-const t = $('toast'); t.textContent = msg; t.classList.add('show');
+const t = $('toast'); if (!t) return;
+t.textContent = msg; t.classList.add('show');
 clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 function mark(seg, v) {
+if (!seg) return;
 seg.querySelectorAll('button').forEach(b => {
 const on = b.dataset.v === v;
 b.classList.toggle('on', on);
@@ -758,7 +781,8 @@ return ⁠已經連續 ${n} 天陪在我身邊了……謝謝你，我的世界�
 /* ---------- entry form ---------- */
 const form = { type: 'expense', cur: 'HKD', cat: '', editId: null };
 function renderChips() {
-const list = settings.cats[form.type].slice();
+const cList = (settings.cats && settings.cats[form.type]) ? settings.cats[form.type] : DEFAULT_CATS[form.type];
+const list = cList.slice();
 if (form.cat && !list.includes(form.cat)) list.push(form.cat);
 $('chips').innerHTML = list.map(c => ⁠<button class="chip${c === form.cat ? ' on' : ''}" data-c="${esc(c)}" aria-pressed="${c === form.cat}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>⁠).join('');
 renderQuick();
@@ -801,6 +825,7 @@ updateConv();
 }
 function renderBudgetBar(st) {
 const card = $('bCard');
+if (!card) return;
 if (!settings.budget || settings.budget <= 0) {
 card.hidden = true;
 return;
@@ -813,7 +838,7 @@ const totalDays = new Date(year, month + 1, 0).getDate();
 const currentDay = now.getDate();
 const remainDays = Math.max(1, totalDays - currentDay + 1);
 const budget = settings.budget;
-const spent = st.spent;
+const spent = st.spent || 0;
 const pct = Math.min(100, Math.max(0, Math.round((spent / budget) * 100)));
 const timePct = Math.min(100, Math.max(0, ((currentDay - 0.5) / totalDays) * 100));
 ￼' + fmt(spent);
@@ -861,7 +886,9 @@ $('sub').textContent = s;
 function refreshNoSpend() {
 const t = ymd(new Date());
 const spent = entries.some(e => e.type === 'expense' && e.date === t), marked = settings.noSpend.includes(t);
-const b = $('nospend'); b.hidden = !!form.editId || spent;
+const b = $('nospend');
+if (!b) return;
+b.hidden = !!form.editId || spent;
 b.textContent = marked ? '✓ 今天已標記沒花錢（點擊取消）' : '🍃 今天沒有花錢';
 }
 function resetForm() {
@@ -1012,9 +1039,9 @@ $('tab-report').innerHTML = h;
 let qSel = null;
 function renderSettings() {
 const upd = settings.rateUpdated ? new Date(settings.rateUpdated).toLocaleString('zh-HK', { hour12: false }) : '尚未聯網更新';
-const tags = t => settings.cats[t].map(c => ⁠<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>⁠).join('');
-const allCats = settings.cats.expense.concat(settings.cats.income);
-if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
+const tags = t => (settings.cats[t] || []).map(c => ⁠<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>⁠).join('');
+const allCats = (settings.cats.expense || []).concat(settings.cats.income || []);
+if (!qSel || !allCats.includes(qSel)) qSel = allCats[0] || '餐飲';
 const qs = settings.quick[qSel] || [];
 ￼
 ￼
@@ -1117,7 +1144,7 @@ const daysBetween = (a, b) => Math.round((new Date(b + 'T00:00:00') - new Date(a
 const nextMonth = k => { const [y, m] = k.split('-').map(Number); return m === 12 ? ⁠${y + 1}-01⁠ : ⁠${y}-${pad(m + 1)}⁠; };
 function setFlag(k) { if (!settings.flags[k]) { settings.flags[k] = true; saveSettings(); } }
 function streakInfo() {
-const s = new Set(entries.map(e => e.date)); settings.noSpend.forEach(d => s.add(d));
+const s = new Set(entries.filter(e => e && e.date).map(e => e.date)); settings.noSpend.forEach(d => s.add(d));
 const arr = [...s].sort();
 let best = 0, run = 0, prev = null;
 arr.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
@@ -1128,7 +1155,7 @@ return { cur, best, last: arr.length ? arr[arr.length - 1] : null };
 }
 function petState() {
 const si = streakInfo(), now = new Date(), mk = ymd(now).slice(0, 7);
-const spent = sumBase(entries.filter(e => e.type === 'expense' && e.date.slice(0, 7) === mk));
+const spent = sumBase(entries.filter(e => e.type === 'expense' && e.date && e.date.slice(0, 7) === mk));
 const b = settings.budget > 0 ? settings.budget : 0;
 let mood, over = 0, rem = 1;
 if (b) { over = (spent - b) / b; rem = 1 - spent / b; }
@@ -1141,8 +1168,8 @@ return { mood, b, spent, over, rem, streak: si.cur };
 const PC = '#D97757', PD = '#C4694A', PK = '#1C2038', PP = '#FF8FA0', PW = '#FFFFFF', PB = '#8FD3FF', PY = '#F2B731', PR = '#FF5C7A';
 const pr = (x, y, w, h, f, o) => ⁠<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f || PK}"${o ? ⁠ opacity="${o}"⁠ : ''}/>⁠;
 function pgeo(mood) {
-const fat = mood.indexOf('full') === 0 ? +mood[4] : 0;
-const bw = [16, 18, 20, 22][fat], bh = [9, 9, 10, 10][fat], legs = [3, 3, 2, 2][fat];
+const fat = (mood && mood.indexOf('full') === 0) ? +mood[4] : 0;
+const bw = [16, 18, 20, 22][fat] || 16, bh = [9, 9, 10, 10][fat] || 9, legs = [3, 3, 2, 2][fat] || 3;
 const cx = 14, d = fat >= 2 ? 5 : 4, top = 3;
 return { fat, bw, bh, legs, cx, x0: cx - bw / 2, top, bottom: top + bh, d, lx: cx - d - 1, rx: cx + d - 1, ey: top + 2, my: top + 5 };
 }
@@ -1160,7 +1187,7 @@ const MOUTH = {
 smile: g => pr(g.cx - 2, g.my, 1, 1) + pr(g.cx + 1, g.my, 1, 1) + pr(g.cx - 1, g.my + 1, 2, 1),
 dot: g => pr(g.cx - 1, g.my + 1, 2, 1),
 frown: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx + 1, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 2, 1),
-wavy: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 1, 1) + pr(g.cx, g.my + 1, 1, 1) + pr(g.cx + 1, g.my, 1, 1),
+wavy: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 1, 1) + pr(g.cx, g.my + 1, 1, 1) + pr(g.cx + 1, g.my + 1, 1, 1),
 D: g => pr(g.cx - 2, g.my, 4, 1) + pr(g.cx - 1, g.my + 1, 2, 1, PP),
 O: g => pr(g.cx - 1, g.my, 2, 2),
 bigO: g => pr(g.cx - 1, g.my, 2, 3) + pr(g.cx - 1, g.my + 2, 2, 1, PP)
@@ -1232,16 +1259,19 @@ return ⁠<svg viewBox="0 0 28 16" shape-rendering="crispEdges" aria-hidden="tru
 let petMood = '', faceT, actT, lookT, busyUntil = 0, seqT = [];
 function refreshPet() {
 const st = petState(), el = $('pet');
-if (st.mood !== petMood) { petMood = st.mood; el.className = 'pet ' + st.mood; el.innerHTML = petSvg(st.mood); }
+if (!el) return st;
+if (st.mood !== petMood || !el.innerHTML) { petMood = st.mood; el.className = 'pet ' + st.mood; el.innerHTML = petSvg(st.mood); }
 el.setAttribute('aria-label', petName() + '（點一下和他說話）');
 return st;
 }
 function setFace(face, ms, inSeq) {
 if (!inSeq) { seqT.forEach(clearTimeout); seqT = []; }
 clearTimeout(faceT);
-const el = $('pet'), fe = el.querySelector('.face'); if (!fe) return;
+const el = $('pet'); if (!el) return;
+const fe = el.querySelector('.face'); if (!fe) return;
 const g = pgeo(petMood || 'calm');
-fe.innerHTML = faceSvg(face, g); el.querySelector('.fx').innerHTML = fxSvg(face, g);
+fe.innerHTML = faceSvg(face, g);
+const fxEl = el.querySelector('.fx'); if (fxEl) fxEl.innerHTML = fxSvg(face, g);
 if (ms) faceT = setTimeout(() => setFace(petMood), ms);
 }
 function faceSeq(list) {
@@ -1252,7 +1282,8 @@ busyUntil = Math.max(busyUntil, Date.now() + t);
 }
 const chew = () => faceSeq([['nom1', 420], ['nom2', 300], ['nom1', 420], ['nom2', 300], ['grin', 700]]);
 function look(dir, ms) {
-const el = $('pet'); ['l', 'r', 'u', 'd'].forEach(k => el.classList.remove('look-' + k));
+const el = $('pet'); if (!el) return;
+['l', 'r', 'u', 'd'].forEach(k => el.classList.remove('look-' + k));
 clearTimeout(lookT);
 if (dir) { el.classList.add('look-' + dir); lookT = setTimeout(() => look(null), ms || 1300); }
 }
@@ -1264,7 +1295,8 @@ waddle: { ms: 1800 }, dizzy: { ms: 1800, face: 'dizzy' }, think: { ms: 2300, fac
 };
 function act(name, faceOverride) {
 const a = ACTS[name]; if (!a) return;
-const el = $('pet'); Object.keys(ACTS).forEach(k => el.classList.remove('a-' + k)); void el.offsetWidth;
+const el = $('pet'); if (!el) return;
+Object.keys(ACTS).forEach(k => el.classList.remove('a-' + k)); void el.offsetWidth;
 el.classList.add('a-' + name);
 const f = faceOverride || a.face; if (f) setFace(f, a.ms);
 busyUntil = Math.max(busyUntil, Date.now() + a.ms);
@@ -1272,7 +1304,7 @@ clearTimeout(actT); actT = setTimeout(() => el.classList.remove('a-' + name), a.
 }
 let bubbleTimer;
 function say(text, ms = 7000) {
-const b = $('bubble');
+const b = $('bubble'); if (!b) return;
 b.innerHTML = ⁠<b class="bn">${esc(petName())}</b>${esc(text.replace(/\{name\}/g, petName()))}⁠;
 b.hidden = false; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
 clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => { b.hidden = true; }, ms);
@@ -1319,7 +1351,7 @@ function wpick(list) { let r = Math.random() * list.reduce((s, x) => s + x[1], 0
 function runIdle(n) {
 (IDLE_ACT[n] || (() => act(n)))();
 const s = IDLE_SAY[n];
-if (s && $('bubble').hidden && Math.random() < .45) say(pickSafe(s), 3600);
+if (s && $('bubble') && $('bubble').hidden && Math.random() < .45) say(pickSafe(s), 3600);
 }
 function idleTick() {
 if (document.hidden || $('tab-add').hidden || modalOpen || Date.now() < busyUntil) return;
@@ -1470,6 +1502,7 @@ const exp = entries.filter(e => e.type === 'expense'), inc = entries.filter(e =>
 const si = streakInfo(), c = { n: entries.length, nInc: inc.length, streak: si.best, f: settings.flags };
 const byDate = {};
 entries.forEach(e => {
+if (!e || !e.date) return;
 const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() };
 o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur);
 });
@@ -1479,14 +1512,14 @@ const ns = settings.noSpend.filter(d => !(byDate[d] && byDate[d].exp)).sort();
 c.ns = ns.length; c.nsRun = 0;
 let run = 0, prev = null;
 ns.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > c.nsRun) c.nsRun = run; prev = d; });
-c.maxExp = Math.max(0, ...exp.map(e => e.hkd));
-c.tiny = exp.some(e => e.hkd > 0 && e.hkd < 1);
+c.maxExp = Math.max(0, ...exp.map(e => e.hkd || 0));
+c.tiny = exp.some(e => (e.hkd || 0) > 0 && (e.hkd || 0) < 1);
 const cnt = {}; exp.forEach(e => cnt[e.cat] = (cnt[e.cat] || 0) + 1);
 c.catUsed = new Set(Object.keys(cnt)); c.catMax = Math.max(0, ...Object.values(cnt));
-c.catAll = settings.cats.expense.length >= 5 && settings.cats.expense.every(k => c.catUsed.has(k));
+c.catAll = Array.isArray(settings.cats.expense) && settings.cats.expense.length >= 5 && settings.cats.expense.every(k => c.catUsed.has(k));
 c.custom = entries.some(e => !BASE_CATS.includes(e.cat));
 const cny = entries.filter(e => e.cur === 'CNY');
-c.nCny = cny.length; c.cnyTotal = cny.filter(e => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
+c.nCny = cny.length; c.cnyTotal = cny.filter(e => e.type === 'expense').reduce((s, e) => s + (e.amount || 0), 0);
 c.notes = entries.filter(e => e.note).length;
 const withTs = entries.filter(e => e.ts);
 c.hours = withTs.map(e => new Date(e.ts).getHours());
@@ -1495,10 +1528,11 @@ c.wk = new Set(entries.map(e => new Date(e.date + 'T00:00:00').getDay()));
 c.md = new Set(entries.map(e => e.date.slice(5)));
 c.eom = entries.some(e => addDays(new Date(e.date + 'T00:00:00'), 1).getDate() === 1);
 c.lucky = entries.some(e => [888, 666, 520, 1314, 168, 88].includes(e.amount));
-c.quickN = Object.values(settings.quick).reduce((s, a) => s + a.length, 0);
+c.quickN = Object.values(settings.quick || {}).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0);
 c.renamed = petName() !== '小克';
 const M = {};
 entries.forEach(e => {
+if (!e || !e.date) return;
 const k = e.date.slice(0, 7);
 const o = M[k] = M[k] || { exp: 0, inc: 0, d: new Set() };
 if (e.type === 'expense') o.exp += val(e); else o.inc += val(e);
@@ -1624,7 +1658,8 @@ if ($('tab-add').hidden || petMood === 'sleep' || modalOpen) return;
 const now = Date.now();
 if (now - lastLook < 500) return;
 lastLook = now;
-const r = $('pet').getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2);
+const petEl = $('pet'); if (!petEl) return;
+const r = petEl.getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2);
 if (Math.abs(dx) < 40 && Math.abs(dy) < 60) return;
 look(Math.abs(dy) > 120 ? 'd' : dx < 0 ? 'l' : 'r', 1100);
 });
@@ -1637,7 +1672,13 @@ else if (b.dataset.nav) { if (b.dataset.nav === 'today') rep.anchor = new Date()
 else if (b.dataset.d) { rep.mode = 'day'; rep.anchor = new Date(b.dataset.d + 'T00:00:00'); renderReport(); window.scrollTo(0, 0); }
 else if (b.dataset.id) startEdit(b.dataset.id);
 });
-('tab-ach').addEventListener('click', e => {   const b = e.target.closest('.acard'); if (!b) return;   const a = ACH.find(x => x.id === b.dataset.a);   if (a && settings.ach[a.id]) openModal(a, [], false); else toast(pickSafe(L.lockedTap)); });('tab-settings').addEventListener('change', e => {
+$('tab-ach').addEventListener('click', e => {
+const b = e.target.closest('.acard'); if (!b) return;
+const a = ACH.find(x => x.id === b.dataset.a);
+if (a && settings.ach[a.id]) openModal(a, [], false);
+else toast(pickSafe(L.lockedTap));
+});
+$('tab-settings').addEventListener('change', e => {
 if (e.target.id === 'setBudget') {
 const v = parseFloat(e.target.value); settings.budget = v > 0 ? v : 0; saveSettings(); updateSub();
 toast(settings.budget ? '每月預算已儲存' : '已取消預算'); checkAch();
@@ -1688,6 +1729,7 @@ const f = e.target.files[0]; if (!f) return;
 const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = '';
 });
 /* ---------- init ---------- */
+try {
 $('date').value = ymd(new Date());
 setType('expense');
 setCur('HKD');
@@ -1700,6 +1742,9 @@ setTimeout(() => { say(moodLine(st), 6500); act(st.mood === 'sleep' ? 'yawn' : '
 scheduleIdle();
 updateBadge();
 if (!settings.rateUpdated || Date.now() - settings.rateUpdated > 6 * 3600 * 1000) fetchRate(false);
+} catch (err) {
+console.error('Init error:', err);
+}
 })();
 </script>
 </body>
