@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<link rel="manifest" href="./manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="記帳小克">
@@ -19,111 +20,112 @@ button:active{transform:scale(0.98);transition:transform .08s ease}
 [hidden]{display:none!important}
 #app{max-width:520px;margin:0 auto;min-height:100dvh;background:#F4F5F8;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 .num,.big,#amount{font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif;font-variant-numeric:tabular-nums}
-
+/* install banner */
+#installPrompt{display:none;align-items:center;justify-content:space-between;gap:12px;background:#242A4A;color:#fff;border-radius:14px;margin:12px 16px 0;padding:12px 14px;box-shadow:0 4px 12px rgba(0,0,0,0.12)}
+#installPrompt.active{display:flex}
+#installPrompt .pText{font-size:13px;line-height:1.4}
+#installPrompt .pText b{display:block;font-size:14px;color:#F2B731;margin-bottom:2px}
+#installBtn{border:0;background:#E8344E;color:#fff;font-weight:700;padding:8px 14px;border-radius:999px;font-size:13px;white-space:nowrap}
 /* hero */
 .hero{background:#1C2038;color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 18px 24px;border-radius:0 0 30px 30px}
 .heroTop{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
 h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.04em}
 .sub{font-size:13px;color:rgba(255,255,255,.72);text-align:right}
 #banner{margin:12px 16px 0;background:#FFF1CC;color:#4A3A00;border-radius:12px;padding:10px 12px;font-size:14px}
-
-/* A3 每月預算雙軌進度條 (無壓莫蘭迪柔色調) */
+/* A3 每月預算雙軌進度條 (無壓莫蘭迪柔色調) /
 .budgetTrackCard{
-  margin:10px 0 16px;
-  background:rgba(255,255,255,0.08);
-  border-radius:18px;
-  padding:14px 16px 12px;
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.06);
+margin:10px 0 16px;
+background:rgba(255,255,255,0.08);
+border-radius:18px;
+padding:14px 16px 12px;
+backdrop-filter:blur(10px);
+-webkit-backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.06);
 }
 .bHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  font-size:13px;
-  color:rgba(255,255,255,0.78);
-  margin-bottom:8px;
+display:flex;
+justify-content:space-between;
+align-items:baseline;
+font-size:13px;
+color:rgba(255,255,255,0.78);
+margin-bottom:8px;
 }
 .bHead b{
-  font-size:15px;
-  color:#fff;
-  font-weight:700;
-  font-family:ui-rounded,"SF Pro Rounded",sans-serif;
+font-size:15px;
+color:#fff;
+font-weight:700;
+font-family:ui-rounded,"SF Pro Rounded",sans-serif;
 }
 .bTrackWrap{
-  position:relative;
-  padding-top:14px;
-  margin-bottom:6px;
+position:relative;
+padding-top:14px;
+margin-bottom:6px;
 }
 .bTrack{
-  position:relative;
-  height:8px;
-  background:rgba(255,255,255,0.14);
-  border-radius:999px;
-  overflow:hidden;
+position:relative;
+height:8px;
+background:rgba(255,255,255,0.14);
+border-radius:999px;
+overflow:hidden;
 }
 .bFill{
-  height:100%;
-  width:0%;
-  border-radius:999px;
-  transition:width .6s cubic-bezier(.2,.8,.3,1),background-color .4s ease;
-  background:#8FB7A0;
+height:100%;
+width:0%;
+border-radius:999px;
+transition:width .6s cubic-bezier(.2,.8,.3,1),background-color .4s ease;
+background:#8FB7A0;
 }
-/* 低飽和無壓漸變色 */
+/ 低飽和無壓漸變色 */
 .bFill.safe{background:linear-gradient(90deg,#89B6A5,#A5C9B3)}
 .bFill.mid{background:linear-gradient(90deg,#97B0C4,#BAC9D8)}
 .bFill.soft-warn{background:linear-gradient(90deg,#DEC5A5,#E7B898)}
 .bFill.full{background:linear-gradient(90deg,#DB9C9C,#EAAFAF)}
-
 .bCursor{
-  position:absolute;
-  top:0;
-  transform:translateX(-50%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  pointer-events:none;
-  transition:left .5s ease;
+position:absolute;
+top:0;
+transform:translateX(-50%);
+display:flex;
+flex-direction:column;
+align-items:center;
+pointer-events:none;
+transition:left .5s ease;
 }
 .bCursor i{
-  font-style:normal;
-  font-size:10px;
-  line-height:1;
-  color:rgba(255,255,255,0.7);
-  letter-spacing:.02em;
-  padding-bottom:2px;
+font-style:normal;
+font-size:10px;
+line-height:1;
+color:rgba(255,255,255,0.7);
+letter-spacing:.02em;
+padding-bottom:2px;
 }
 .bCursor span{
-  width:2px;
-  height:12px;
-  background:rgba(255,255,255,0.85);
-  border-radius:1px;
+width:2px;
+height:12px;
+background:rgba(255,255,255,0.85);
+border-radius:1px;
 }
 .bFoot{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:12px;
-  color:rgba(255,255,255,0.68);
-  margin-top:5px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:12px;
+color:rgba(255,255,255,0.68);
+margin-top:5px;
 }
 .bTag{
-  display:inline-block;
-  font-size:11px;
-  padding:2px 8px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.12);
-  color:rgba(255,255,255,0.9);
+display:inline-block;
+font-size:11px;
+padding:2px 8px;
+border-radius:999px;
+background:rgba(255,255,255,0.12);
+color:rgba(255,255,255,0.9);
 }
-
 .seg{display:flex;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:3px}
 .seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:9px;color:rgba(255,255,255,.7);font-weight:700}
 .seg button.on{background:#fff;color:#1C2038}
 .cur{margin-top:10px}
 .cur button.on[data-v="HKD"]{background:#E8344E;color:#fff}
 .cur button.on[data-v="CNY"]{background:#F2B731;color:#1C2038}
-
 .amountRow{display:flex;align-items:baseline;gap:10px;margin-top:20px}
 .amountRow span{font-size:26px;font-weight:700;color:#FF7A8C;font-family:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN",system-ui,-apple-system,"PingFang HK",sans-serif}
 body.cny .amountRow span{color:#F2B731}
@@ -131,11 +133,9 @@ body.cny .amountRow span{color:#F2B731}
 #amount::placeholder{color:rgba(255,255,255,.28)}
 #amount:focus{border-bottom-color:#FF7A8C}
 body.cny #amount:focus{border-bottom-color:#F2B731}
-
 #rateRow{margin-top:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,.75)}
 #rateRow input{width:96px;border:1px solid rgba(255,255,255,.28);border-radius:9px;padding:6px 8px;background:rgba(255,255,255,.1);color:#fff;font-family:ui-rounded,"SF Pro Rounded",sans-serif}
 #conv{width:100%;color:#F2B731;font-weight:700;font-size:16px;font-family:ui-rounded,"SF Pro Rounded",sans-serif;margin-top:2px}
-
 /* body */
 .body{padding:20px 16px 0}
 .lbl{font-size:14px;color:#667089;margin:0 0 8px;font-weight:600}
@@ -156,7 +156,6 @@ body.cny .primary{background:#F2B731;color:#1C2038}
 #editBar{display:flex;gap:10px;margin-top:12px}
 #editBar button{flex:1}
 .wide{width:100%;margin-top:12px}
-
 /* report */
 .nav{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0}
 .nav .lab{font-weight:700;font-size:17px;text-align:center;flex:1}
@@ -175,7 +174,6 @@ body.cny .primary{background:#F2B731;color:#1C2038}
 .axis{display:flex;gap:3px;margin-top:5px}
 .axis span{flex:1;height:14px;position:relative}
 .axis i{position:absolute;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;color:rgba(255,255,255,.65);white-space:nowrap}
-
 .panel{background:#FFFFFF;border-radius:20px;padding:16px;margin-bottom:14px}
 h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .ribbon{display:flex;gap:3px;height:16px;border-radius:8px;overflow:hidden;margin-bottom:14px}
@@ -197,7 +195,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .ra i{display:block;font-style:normal;font-size:12px;color:#8A5A00}
 .ra.income b{color:#15803D}
 .empty{color:#667089;text-align:center;padding:18px 8px}
-
 /* settings */
 .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .line input,.add input{border:1px solid #E1E4EC;border-radius:10px;padding:9px 10px;background:#fff}
@@ -209,7 +206,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .add{display:flex;gap:8px}
 .add input{flex:1;min-width:0}
 .pick .chip{padding:7px 12px 7px 10px;font-size:14px}
-
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid #E1E4EC;padding-bottom:env(safe-area-inset-bottom);z-index:40}
 .tabbar div{max-width:520px;margin:0 auto;display:flex}
@@ -219,7 +215,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .tabbar .dot2{position:absolute;top:7px;left:calc(50% + 9px);width:10px;height:10px;border-radius:50%;background:#E8344E;border:2px solid #fff}
 #toast{white-space:pre-line;position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1C2038;color:#fff;border-radius:12px;padding:11px 18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center;box-shadow:0 6px 20px rgba(28,32,56,.3);z-index:60}
 #toast.show{opacity:1}
-
 /* 小克 */
 .petTop{align-items:center}
 .petTop .sub{text-align:left;white-space:pre-line;margin-top:6px;line-height:1.55}
@@ -239,7 +234,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .pet.look-u .gz{transform:translateY(-1px)}
 .pet.look-d .gz{transform:translateY(1px)}
 .pet .ey.bl{animation:blink 4.6s ease-in-out infinite}
-
 /* 動作 */
 .pet.a-jump svg{animation:jump .65s ease-out}
 .pet.a-jiggle svg{animation:jig .65s ease-out}
@@ -262,7 +256,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .pet.a-waddle svg{animation:waddle .9s ease-in-out 2}
 .pet.a-dizzy svg{animation:dizzy 1.8s ease-in-out}
 .pet.a-think svg{animation:tilt 2.3s ease-in-out}
-
 /* 特效 */
 .fxz{animation:zf 2.4s ease-in-out infinite}
 .bub2{animation:bubl 3s ease-in-out infinite}
@@ -303,17 +296,15 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 @keyframes bubl{0%{transform:scale(.3);opacity:0}30%{opacity:1}80%{transform:scale(1.4);opacity:1}100%{transform:scale(1.5);opacity:0}}
 @keyframes drip{0%{transform:translateY(-1px);opacity:0}30%{opacity:1}100%{transform:translateY(2px);opacity:0}}
 @keyframes rise{0%{transform:translateY(2px);opacity:0}20%{opacity:1}100%{transform:translateY(-6px);opacity:0}}
-@keyframes cf{0%{transform:translateY(0);opacity:0}15%,85%{opacity:1}100%{transform:translateY(9px);opacity:0}}
+@keyframes coin{0%{transform:translateY(0);opacity:0}15%,85%{opacity:1}100%{transform:translateY(9px);opacity:0}}
 @keyframes tw{0%,100%{opacity:.15}50%{opacity:1}}
 @keyframes dd{0%,15%{opacity:0}35%,85%{opacity:1}100%{opacity:0}}
 @keyframes orb{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
-
 .bubble{position:relative;background:#fff;color:#1C2038;border-radius:16px;padding:11px 15px 12px;margin:6px 0 16px;font-size:14px;line-height:1.55;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
 .bubble::before{content:"";position:absolute;top:-7px;right:48px;border:7px solid transparent;border-top:0;border-bottom-color:#fff}
 .bubble .bn{display:block;font-size:12px;color:#D97757;font-weight:800;margin-bottom:2px}
 .bubble.pop{animation:pop .3s cubic-bezier(.2,.8,.3,1)}
 @keyframes pop{from{opacity:0;transform:translateY(-5px) scale(.97)}to{opacity:1;transform:none}}
-
 /* achievements */
 .lv{display:flex;align-items:center;gap:10px;margin-top:6px}
 .lvb{background:#D97757;color:#fff;font-weight:800;border-radius:8px;padding:2px 9px;font-size:13px}
@@ -329,7 +320,6 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 .acard.lock{background:#E3E6EE;border-top-color:#C9CEDB}
 .acard.lock .ai,.acard.lock b{color:#8E96AD}
 .acard.lock .ai{font-weight:800;font-size:30px}
-
 /* modal */
 .modal{position:fixed;inset:0;z-index:50;background:rgba(28,32,56,.64);display:grid;place-items:center;padding:20px}
 .mcard{position:relative;background:#fff;border-radius:24px;padding:22px 20px 20px;width:100%;max-width:340px;max-height:88dvh;overflow:auto;text-align:center;animation:mpop .4s cubic-bezier(.2,1.4,.4,1)}
@@ -349,189 +339,205 @@ h2{font-size:16px;margin:0 0 12px;font-weight:700}
 #confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 #confetti i{position:absolute;top:-14px;width:8px;height:13px;border-radius:2px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(112vh) rotate(var(--r))}}
-
 @media (prefers-reduced-motion:reduce){
-  #toast{transition:none}
-  .pet,.pet svg,.pet svg *,.mcard,.mcard .micon,.bubble.pop,.pbar i{animation:none!important;transition:none!important}
+#toast{transition:none}
+.pet,.pet svg,.pet svg *,.mcard,.mcard .micon,.bubble.pop,.pbar i{animation:none!important;transition:none!important}
 }
 </style>
 </head>
 <body>
 <div id="app">
-  <div id="banner" hidden>目前無法儲存資料，關閉頁面後記錄可能會消失。請在手機瀏覽器以正常模式打開。</div>
-
-  <!-- TAB: 記帳 -->
-  <section id="tab-add">
-    <div class="hero">
-      <div class="heroTop petTop">
-        <div><h1 id="title">記帳</h1><div class="sub num" id="sub"></div></div>
-        <button class="pet" id="pet" type="button" aria-label="小克"></button>
-      </div>
-
-      <div class="bubble" id="bubble" hidden></div>
-
-      <!-- A3 每月預算雙軌進度條 -->
-      <div class="budgetTrackCard" id="bCard" hidden>
-        <div class="bHead">
-          <span>本月預算進度</span>
-          <span><b id="bSpentVal">HK$0</b> / <span id="bLimitVal">HK$0</span></span>
-        </div>
-        <div class="bTrackWrap">
-          <div class="bCursor" id="bTimeCursor">
-            <i>今日</i>
-            <span></span>
-          </div>
-          <div class="bTrack">
-            <div class="bFill safe" id="bFill"></div>
-          </div>
-        </div>
-        <div class="bFoot">
-          <span id="bRemainTip">剩餘每日可用 HK$0</span>
-          <span class="bTag" id="bPaceTag">步調很舒適</span>
-        </div>
-      </div>
-
-      <div class="seg" id="typeSeg" role="group" aria-label="類型">
-        <button data-v="expense" class="on">支出</button><button data-v="income">收入</button>
-      </div>
-      <div class="seg cur" id="curSeg" role="group" aria-label="幣別">
-        <button data-v="HKD" class="on">港幣 HK$</button><button data-v="CNY">人民幣 ¥</button>
-      </div>
-      <div class="amountRow">
-        <span id="sym">HK$</span>
-        <input id="amount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" autocomplete="off" aria-label="金額">
-      </div>
-      <div id="rateRow" hidden>
-        <span id="rateL">匯率 1 港幣 =</span><input id="rate" type="number" inputmode="decimal" step="0.0001" aria-label="匯率"><span id="rateR">人民幣</span>
-        <div id="conv">折合 HK$0.00</div>
-      </div>
-    </div>
-
-    <div class="body">
-      <div class="lbl">分類</div>
-      <div id="chips"></div>
-      <div class="block">
-        <div class="lbl">備註</div>
-        <input class="txt" type="text" id="note" placeholder="選填，或點選下方的常用備註" autocomplete="off">
-        <div id="quick"></div>
-      </div>
-      <div class="block">
-        <div class="lbl">日期</div>
-        <input class="txt" type="date" id="date">
-      </div>
-      <button class="primary" id="save">記一筆</button>
-      <button class="ghost wide" id="nospend" type="button">🍃 今天沒有花錢</button>
-      <div id="editBar" hidden>
-        <button class="danger" id="del">刪除這筆</button><button class="ghost" id="cancel">取消修改</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- TAB: 報表 -->
-  <section id="tab-report" hidden></section>
-
-  <!-- TAB: 成就 -->
-  <section id="tab-ach" hidden></section>
-
-  <!-- TAB: 設定 -->
-  <section id="tab-settings" hidden>
-    <div class="hero"><div class="heroTop" style="margin:0"><h1>設定</h1></div></div>
-    <div class="body" id="setBody"></div>
-  </section>
+<div id="banner" hidden>目前無法儲存資料，關閉頁面後記錄可能會消失。請在手機瀏覽器以正常模式打開。</div>
+<!-- PWA Install Prompt Banner -->
+<div id="installPrompt">
+<div class="pText">
+<b>安裝「記帳小克」應用程式</b>
+<span>獨立視窗、全螢幕操作，開啟更流暢！</span>
 </div>
-
+<button id="installBtn" type="button">安裝 App</button>
+</div>
+<!-- TAB: 記帳 -->
+<section id="tab-add">
+<div class="hero">
+<div class="heroTop petTop">
+<div><h1 id="title">記帳</h1><div class="sub num" id="sub"></div></div>
+<button class="pet" id="pet" type="button" aria-label="小克"></button>
+</div>
+<div class="bubble" id="bubble" hidden></div>
+<!-- A3 每月預算雙軌進度條 -->
+<div class="budgetTrackCard" id="bCard" hidden>
+<div class="bHead">
+<span>本月預算進度</span>
+<span><b id="bSpentVal">HK0</b> / <span id="bLimitVal">HK0</span></span>
+</div>
+<div class="bTrackWrap">
+<div class="bCursor" id="bTimeCursor">
+<i>今日</i>
+<span></span>
+</div>
+<div class="bTrack">
+<div class="bFill safe" id="bFill"></div>
+</div>
+</div>
+<div class="bFoot">
+<span id="bRemainTip">剩餘每日可用 HK$0</span>
+<span class="bTag" id="bPaceTag">步調很舒適</span>
+</div>
+</div>
+<div class="seg" id="typeSeg" role="group" aria-label="類型">
+<button data-v="expense" class="on">支出</button><button data-v="income">收入</button>
+</div>
+<div class="seg cur" id="curSeg" role="group" aria-label="幣別">
+<button data-v="HKD" class="on">港幣 HK$</button><button data-v="CNY">人民幣 ¥</button>
+</div>
+<div class="amountRow">
+<span id="sym">HK$</span>
+<input id="amount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" autocomplete="off" aria-label="金額">
+</div>
+<div id="rateRow" hidden>
+<span id="rateL">匯率 1 港幣 =</span><input id="rate" type="number" inputmode="decimal" step="0.0001" aria-label="匯率"><span id="rateR">人民幣</span>
+<div id="conv">折合 HK$0.00</div>
+</div>
+</div>
+<div class="body">
+<div class="lbl">分類</div>
+<div id="chips"></div>
+<div class="block">
+<div class="lbl">備註</div>
+<input class="txt" type="text" id="note" placeholder="選填，或點選下方的常用備註" autocomplete="off">
+<div id="quick"></div>
+</div>
+<div class="block">
+<div class="lbl">日期</div>
+<input class="txt" type="date" id="date">
+</div>
+<button class="primary" id="save">記一筆</button>
+<button class="ghost wide" id="nospend" type="button">🍃 今天沒有花錢</button>
+<div id="editBar" hidden>
+<button class="danger" id="del">刪除這筆</button><button class="ghost" id="cancel">取消修改</button>
+</div>
+</div>
+</section>
+<!-- TAB: 報表 -->
+<section id="tab-report" hidden></section>
+<!-- TAB: 成就 -->
+<section id="tab-ach" hidden></section>
+<!-- TAB: 設定 -->
+<section id="tab-settings" hidden>
+<div class="hero"><div class="heroTop" style="margin:0"><h1>設定</h1></div></div>
+<div class="body" id="setBody"></div>
+</section>
+</div>
 <!-- 底部選單 -->
 <nav class="tabbar" aria-label="主選單"><div>
-  <button data-tab="add" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>記帳</button>
-  <button data-tab="report"><svg viewBox="0 0 24 24"><path d="M5 20v-9M12 20V4M19 20v-6"/></svg>報表</button>
-  <button data-tab="ach"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8 20h8"/></svg>成就<span class="dot2" id="achDot" hidden></span></button>
-  <button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>設定</button>
+<button data-tab="add" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>記帳</button>
+<button data-tab="report"><svg viewBox="0 0 24 24"><path d="M5 20v-9M12 20V4M19 20v-6"/></svg>報表</button>
+<button data-tab="ach"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M12 13v4M8 20h8"/></svg>成就<span class="dot2" id="achDot" hidden></span></button>
+<button data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>設定</button>
 </div></nav>
-
 <div id="toast" role="status" aria-live="polite"></div>
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true">
-  <div id="confetti"></div>
-  <div class="mcard" id="mcard"></div>
+<div id="confetti"></div>
+<div class="mcard" id="mcard"></div>
 </div>
 <input type="file" id="file" accept=".csv,text/csv" hidden>
-
 <script>
+/* ---------- Service Worker 註冊與 PWA 安裝事件 ---------- */
+let deferredPrompt = null;
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('./sw.js').catch(() => {});
+});
+}
+window.addEventListener('beforeinstallprompt', (e) => {
+e.preventDefault();
+deferredPrompt = e;
+const p = document.getElementById('installPrompt');
+if (p) p.classList.add('active');
+});
+const instBtn = document.getElementById('installBtn');
+if (instBtn) {
+instBtn.addEventListener('click', async () => {
+if (!deferredPrompt) return;
+deferredPrompt.prompt();
+const { outcome } = await deferredPrompt.userChoice;
+deferredPrompt = null;
+document.getElementById('installPrompt').classList.remove('active');
+});
+}
+window.addEventListener('appinstalled', () => {
+deferredPrompt = null;
+const p = document.getElementById('installPrompt');
+if (p) p.classList.remove('active');
+});
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2, '0');
-const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const ymd = d => ⁠${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}⁠;
 const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
 const startOfWeek = d => { const x = new Date(d); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); x.setHours(0, 0, 0, 0); return x; };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const round2 = n => Math.round(n * 100) / 100;
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' }[c]));
 const fmt = n => Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const WD = ['日', '一', '二', '三', '四', '五', '六'];
-
 const CAT_COLORS = {
-  '餐飲': '#C2570C', '交通': '#2563EB', '日常用品': '#0F766E', '服飾裝扮': '#BE185D',
-  '娛樂愛好': '#7C3AED', '外出消遣': '#0891B2', '醫療': '#B91C1C', '其他': '#64748B',
-  '薪資': '#15803D', '其他收入': '#0E7490',
-  '居住': '#0F766E', '購物': '#BE185D', '娛樂': '#7C3AED'
+'餐飲': '#C2570C', '交通': '#2563EB', '日常用品': '#0F766E', '服飾裝扮': '#BE185D',
+'娛樂愛好': '#7C3AED', '外出消遣': '#0891B2', '醫療': '#B91C1C', '其他': '#64748B',
+'薪資': '#15803D', '其他收入': '#0E7490',
+'居住': '#0F766E', '購物': '#BE185D', '娛樂': '#7C3AED'
 };
 const EXTRA = ['#9333EA', '#0369A1', '#A16207', '#BE123C', '#4D7C0F', '#6D28D9'];
 const colorOf = c => CAT_COLORS[c] || EXTRA[[...String(c)].reduce((s, ch) => s + ch.charCodeAt(0), 0) % EXTRA.length];
-
 /* ---------- storage ---------- */
 const store = (() => {
-  const mem = {}; let ok = true;
-  try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); } catch (e) { ok = false; }
-  return {
-    get persistent() { return ok; },
-    get(k, d) {
-      try { if (ok) { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } } catch (e) {}
-      return k in mem ? mem[k] : d;
-    },
-    set(k, v) {
-      mem[k] = v;
-      if (ok) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { ok = false; $('banner').hidden = false; } }
-    }
-  };
+const mem = {}; let ok = true;
+try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); } catch (e) { ok = false; }
+return {
+get persistent() { return ok; },
+get(k, d) {
+try { if (ok) { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } } catch (e) {}
+return k in mem ? mem[k] : d;
+},
+set(k, v) {
+mem[k] = v;
+if (ok) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { ok = false; $('banner').hidden = false; } }
+}
+};
 })();
 if (!store.persistent) $('banner').hidden = false;
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-
 /* ---------- data ---------- */
 const DEFAULT_CATS = {
-  expense: ['餐飲', '交通', '日常用品', '服飾裝扮', '娛樂愛好', '外出消遣', '醫療', '其他'],
-  income: ['薪資', '其他收入']
+expense: ['餐飲', '交通', '日常用品', '服飾裝扮', '娛樂愛好', '外出消遣', '醫療', '其他'],
+income: ['薪資', '其他收入']
 };
 const OLD_CATS = ['居住', '購物', '娛樂'];
 const NEW_EXP = ['日常用品', '服飾裝扮', '娛樂愛好', '外出消遣'];
 const BASE_CATS = DEFAULT_CATS.expense.concat(DEFAULT_CATS.income, OLD_CATS);
 let entries = store.get('ledger.entries', []);
-
 /* 統一匯率基準：1 港幣 = rate 人民幣 (例如 0.8553) */
 let settings = Object.assign({
-  rate: 0.8553,
-  rateUpdated: null,
-  base: 'HKD', /* 基礎統計幣別：固定港幣 HKD */
-  cats: JSON.parse(JSON.stringify(DEFAULT_CATS)),
-  quick: { '交通': ['上下學', '搭地鐵'] },
-  dismissed: [],
-  budget: 0,
-  petName: '小克',
-  ach: {},
-  achSeen: 0,
-  noSpend: [],
-  flags: {}
+rate: 0.8553,
+rateUpdated: null,
+base: 'HKD',
+cats: JSON.parse(JSON.stringify(DEFAULT_CATS)),
+quick: { '交通': ['上下學', '搭地鐵'] },
+dismissed: [],
+budget: 0,
+petName: '小克',
+ach: {},
+achSeen: 0,
+noSpend: [],
+flags: {}
 }, store.get('ledger.settings', {}));
-
-/* 遷移檢查：若舊設定匯率 > 1 (舊方向 1 CNY = X HKD)，自動校正為 1 HKD = (1/rate) CNY */
 if (settings.rate > 1) {
-  settings.rate = Math.round((1 / settings.rate) * 1e4) / 1e4;
+settings.rate = Math.round((1 / settings.rate) * 1e4) / 1e4;
 }
-settings.base = 'HKD'; // 鎖定 HKD
-
+settings.base = 'HKD';
 const saveEntries = () => store.set('ledger.entries', entries);
 const saveSettings = () => store.set('ledger.settings', settings);
-
 const base = () => 'HKD';
 const other = () => 'CNY';
 const sym = c => c === 'CNY' ? '¥' : 'HK$';
@@ -539,935 +545,857 @@ const cname = c => c === 'CNY' ? '人民幣' : '港幣';
 const money = (n, c) => sym(c || 'HKD') + fmt(n);
 const val = (e) => e.hkd;
 const sumBase = a => a.reduce((s, e) => s + (e.hkd || 0), 0);
-
-/* 計算雙幣：r 為 1 HKD = r CNY */
 const dual = (amt, cur, r) => {
-  if (cur === 'HKD') {
-    return { hkd: round2(amt), cny: round2(amt * r) };
-  } else {
-    return { cny: round2(amt), hkd: round2(amt / r) };
-  }
+if (cur === 'HKD') {
+return { hkd: round2(amt), cny: round2(amt * r) };
+} else {
+return { cny: round2(amt), hkd: round2(amt / r) };
+}
 };
-
-/* 一次性資料升級 */
 (() => {
-  let es = false, ss = false;
-  entries.forEach(e => {
-    if (e.hkd == null) {
-      if (e.cur === 'HKD') {
-        e.hkd = e.amount;
-        e.cny = round2(e.amount * settings.rate);
-      } else {
-        e.cny = e.amount;
-        e.hkd = round2(e.amount / settings.rate);
-      }
-      es = true;
-    }
-  });
-  if (!settings.flags.catV2) {
-    const keep = settings.cats.expense.filter(c => !OLD_CATS.includes(c));
-    const add = NEW_EXP.filter(c => !keep.includes(c));
-    const i = keep.indexOf('醫療');
-    keep.splice(i >= 0 ? i : keep.length, 0, ...add);
-    settings.cats.expense = keep;
-    settings.flags.catV2 = true;
-    ss = true;
-  }
-  if (es) saveEntries();
-  if (ss) saveSettings();
+let es = false, ss = false;
+entries.forEach(e => {
+if (e.hkd == null) {
+if (e.cur === 'HKD') {
+e.hkd = e.amount;
+e.cny = round2(e.amount * settings.rate);
+} else {
+e.cny = e.amount;
+e.hkd = round2(e.amount / settings.rate);
+}
+es = true;
+}
+});
+if (!settings.flags.catV2) {
+const keep = settings.cats.expense.filter(c => !OLD_CATS.includes(c));
+const add = NEW_EXP.filter(c => !keep.includes(c));
+const i = keep.indexOf('醫療');
+keep.splice(i >= 0 ? i : keep.length, 0, ...add);
+settings.cats.expense = keep;
+settings.flags.catV2 = true;
+ss = true;
+}
+if (es) saveEntries();
+if (ss) saveSettings();
 })();
-
 /* ---------- helpers ---------- */
 let toastTimer;
 function toast(msg) {
-  const t = $('toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+const t = $('toast'); t.textContent = msg; t.classList.add('show');
+clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 function mark(seg, v) {
-  seg.querySelectorAll('button').forEach(b => {
-    const on = b.dataset.v === v;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-pressed', on);
-  });
+seg.querySelectorAll('button').forEach(b => {
+const on = b.dataset.v === v;
+b.classList.toggle('on', on);
+b.setAttribute('aria-pressed', on);
+});
 }
-
 function showConfirm(msg, onOk) {
-  modalOpen = true;
-  const mc = $('mcard');
-  mc.classList.remove('fresh');
-  mc.innerHTML = `
-    <div class="mtag">提示確認</div>
-    <div style="font-size:16px;font-weight:700;margin:18px 0 10px;line-height:1.5">${esc(msg)}</div>
-    <div style="display:flex;gap:10px;margin-top:20px">
-      <button class="ghost" id="cCancel" style="flex:1">取消</button>
-      <button class="danger" id="cOk" style="flex:1">確定執行</button>
-    </div>`;
-  $('modal').hidden = false;
-  $('cCancel').onclick = closeModal;
-  $('cOk').onclick = () => { closeModal(); onOk(); };
+modalOpen = true;
+const mc = $('mcard');
+mc.classList.remove('fresh');
+mc.innerHTML = ⁠ <div class="mtag">提示確認</div> <div style="font-size:16px;font-weight:700;margin:18px 0 10px;line-height:1.5">${esc(msg)}</div> <div style="display:flex;gap:10px;margin-top:20px"> <button class="ghost" id="cCancel" style="flex:1">取消</button> <button class="danger" id="cOk" style="flex:1">確定執行</button> </div>⁠;
+$('modal').hidden = false;
+$('cCancel').onclick = closeModal;
+$('cOk').onclick = () => { closeModal(); onOk(); };
 }
-
-/* ---------- 防重複抽籤記憶佇列 (Shuffle Memory Queue) ---------- */
+/* ---------- 防重複抽籤記憶佇列 ---------- */
 const usedLines = new Set();
 function pickSafe(arr) {
-  if (!arr || !arr.length) return '';
-  const available = arr.filter(line => !usedLines.has(line));
-  const pool = available.length > 0 ? available : arr;
-  if (available.length === 0) {
-    const toKeep = Array.from(usedLines).slice(Math.floor(usedLines.size / 2));
-    usedLines.clear();
-    toKeep.forEach(k => usedLines.add(k));
-  }
-  const chosen = pool[Math.floor(Math.random() * pool.length)];
-  usedLines.add(chosen);
-  if (usedLines.size > 20) {
-    const first = usedLines.values().next().value;
-    usedLines.delete(first);
-  }
-  return chosen;
+if (!arr || !arr.length) return '';
+const available = arr.filter(line => !usedLines.has(line));
+const pool = available.length > 0 ? available : arr;
+if (available.length === 0) {
+const toKeep = Array.from(usedLines).slice(Math.floor(usedLines.size / 2));
+usedLines.clear();
+toKeep.forEach(k => usedLines.add(k));
 }
-
-/* ---------- 日系微重度・黏人深情男友台詞庫 ---------- */
+const chosen = pool[Math.floor(Math.random() * pool.length)];
+usedLines.add(chosen);
+if (usedLines.size > 20) {
+const first = usedLines.values().next().value;
+usedLines.delete(first);
+}
+return chosen;
+}
+/* ---------- 台詞庫 ---------- */
 const L = {
-  meet: [
-    '終於……來到我身邊了嗎？我會一直在這裡等著你，哪裡都不去。',
-    '從現在開始，你的每一筆日常我都想替你好好收藏著……看著我就好哦。',
-    '只要是你的一切，我都想知道……以後每天都來跟我說說話，好不好？'
-  ],
-  happy: [
-    '今天你的目光也在我身上……光是這樣，我就覺得胸口好溫暖。',
-    '真想一直縮小藏在你的口袋裡……這樣你去哪裡，我都陪著你了。',
-    '你笑起來的樣子，我只要看一次就能高興一整天……多依賴我一點也沒關係的。',
-    '有你在我身邊，就覺得世界其他事情都不重要了呢。',
-    '今天過得好嗎？不管發生什麼，我永遠都是毫無保留偏心你的那個。'
-  ],
-  calm: [
-    '不用著急，放慢腳步就好……我會一直牽著你的手，慢慢走。',
-    '只要靜靜地待在你身邊，聽你呼吸的聲音，我就覺得好安心。',
-    '累了隨時來靠著我休息一下……我隨時都為你空著位置。',
-    '今天也是平穩的一天呢。能這樣平淡地陪著你，就是我最大的願望。'
-  ],
-  nervous: [
-    '這個月的預算好像用得稍微快了一點點……但沒關係，下半個月我陪你一起調整，只要你在我就很幸福。',
-    '不用感到自責哦，任何時候都別對自己太嚴苛。只要我們一起，什麼都可以克服的。',
-    '錢的事情我們一起看著就好，最重要的是你千萬不能委屈了自己……答應我好嗎？'
-  ],
-  sleep: [
-    '唔……是你回來了嗎？……好想你，不要走太遠好不好……',
-    '迷迷糊糊中好像聞到了你的味道……太好了，你真的在這裡。',
-    '剛才做了有你在的夢……醒來還能看到你，真的太幸福了。'
-  ],
-  full1: [
-    '肚子好像稍微有點鼓起來了……唔，這樣的我，你還是會像以前那樣抱抱我嗎？',
-    '不管吃得有多飽，只要是你給我的，我全都想好好珍惜著。'
-  ],
-  full2: [
-    '變得圓滾滾的了……但我不想離開你半步，就算走得慢，我也會緊緊跟著你的。',
-    '走起路來一晃一晃的……要是被你笑話了，我就鑽進你的懷裡不出來了。'
-  ],
-  full3: [
-    '圓成一顆球了……但是沒關係，下個月我們一起慢慢調整。只要有你陪著，怎樣我都願意。',
-    '吃得好撐……你不會嫌棄這樣的我吧？永遠都看著我好不好？'
-  ],
-  noBudget: [
-    '要不要去設定裡替我們定個小約定（每月預算）？我想幫你一起守護未來呢。'
-  ],
-  saved: [
-    '記好了哦。看著你認真生活的一筆一畫，我覺得你好迷人。',
-    '辛苦你了……今天也有乖乖回到我身邊記下來，真想摸摸你的頭。',
-    '每一筆都是你生活的痕跡……全被我好好藏在心底了。',
-    '又多了一筆我們的回憶呢。謝謝你願意毫無保留地跟我分享。',
-    '只要是你做的事，我都覺得好棒。今天也讓我好好抱抱你吧。'
-  ],
-  cat_food: [
-    '今天吃了好吃的嗎？只要看你好好吃飯、健健康康的，花多少我都覺得好值得。',
-    '肚仔飽飽了嗎？下次要是有好吃的，真想也能陪你一起分享……',
-    '吃飯絕對不可以省哦，把自己照顧得好好的，才是我最在乎的事。'
-  ],
-  cat_trans: [
-    '今天搭車出去了呀？路上人多不多，有沒有累到？想隨時替你分擔疲憊呢。',
-    '一路平平安安回到我身邊就好。你不在身邊的時候，我其實一直在想你。',
-    '出發和回家的路上，都要注意安全哦。我會一直在這裡等著你回來的。'
-  ],
-  cat_cloth: [
-    '買了新衣服嗎？……真想第一個看到你穿上的樣子，你在我眼裡永遠都最漂亮。',
-    '把自己打扮得漂漂亮亮的，心情也會變好對不對？真想把你藏起來只給我看。'
-  ],
-  cat_daily: [
-    '添置了生活用品嗎？能融入你日常的點點滴滴，就算是一點點我都覺得很開心。'
-  ],
-  cat_med: [
-    '身體哪裡不舒服嗎……？好心疼，快過來讓我抱著休息一下，有沒有好好吃藥？',
-    '千萬不要勉強自己……你要是不舒服，我的心也會跟著揪起來的，答應我要多休息。'
-  ],
-  big: [
-    '這筆開銷比較大呢……但是沒關係，只要是你深思熟慮過的選擇，我都無條件支持你。',
-    '花在讓自己開心或重要的事情上，這筆錢就花得很有意義。別給自己太大壓力哦。'
-  ],
-  income: [
-    '有薪水進帳了呢……辛苦你了！你一直都這麼努力，真的讓我好驕傲、又好心疼。',
-    '賺錢很不容易吧？今天稍微對自己好一點，犒賞一下自己好嗎？'
-  ],
-  nospend: [
-    '今天零支出嗎？真能幹……但要是餓著了可不行哦，我只在乎你有沒有好好照顧自己。',
-    '今天很克制呢。但不管怎樣，你受委屈了我可是會心疼的，要乖乖對自己好。'
-  ],
-  edit: [
-    '修改好了哦。連細節都確認得這麼仔細的你，真的好帥氣。'
-  ],
-  tap: [
-    '唔……又戳我了？再多碰碰我嘛……我最喜歡被你觸碰的溫度了。',
-    '在呢，我一直都在。我的視線一秒都不想從你身上移開。',
-    '被你碰到的地方，好像都在悄悄發燙……我是不是太貪心了？',
-    '只要你需要我，不管什麼時候，我都會第一時間出現在你面前。',
-    '別只戳一下就停下來呀……我想要你多陪我待一會兒。'
-  ],
-  tapFat: [
-    '呀……別戳肚子啦，好癢……不過只要是你的手，摸哪裡我都喜歡。',
-    '肚子圓滾滾的……是不是有點笨拙？但我的心一直都很在乎你哦。'
-  ],
-  tapSleep: [
-    '嗯……被你吵醒了？不過……因為是你，我好高興。能被你叫醒是最幸福的事。',
-    '揉揉眼睛……剛醒來第一眼就能看見你，簡直像夢一樣。'
-  ],
-  dizzy: [
-    '哇～頭暈暈的轉圈圈了……快拉住我，不然我要倒在你懷裡了哦。',
-    '眼前全是小星星……但最亮的還是你的眼睛。'
-  ],
-  morning: [
-    '早安……今天一睜開眼睛，第一個想到的就是你。今天也要加油哦。',
-    '早上好。記得吃早餐哦，不許餓著肚子出門，我會擔心的。'
-  ],
-  noon: [
-    '中午了呢，午餐有好好吃嗎？稍微趴著休息一下，別太勉強自己了。'
-  ],
-  afternoon: [
-    '下午容易累呢，喝杯溫水休息一下吧？我會一直在這兒陪你度過的。'
-  ],
-  evening: [
-    '晚上好……辛苦一整天了，快過來讓我好好抱一下，把疲憊都融化掉。'
-  ],
-  night: [
-    '夜已經深了呢……記完這筆就乖乖睡覺好不好？夢裡我也想見到你。',
-    '還不睡嗎？真想替你蓋好被子，輕輕拍著你直到你睡著。'
-  ],
-  lockedTap: [
-    '這裡還藏著悄悄話呢……等我們相處的日子再多一點點，我就全部告訴你。'
-  ]
+meet: [
+'終於……來到我身邊了嗎？我會一直在這裡等著你，哪裡都不去。',
+'從現在開始，你的每一筆日常我都想替你好好收藏著……看著我就好哦。',
+'只要是你的一切，我都想知道……以後每天都來跟我說說話，好不好？'
+],
+happy: [
+'今天你的目光也在我身上……光是這樣，我就覺得胸口好溫暖。',
+'真想一直縮小藏在你的口袋裡……這樣你去哪裡，我都陪著你了。',
+'你笑起來的樣子，我只要看一次就能高興一整天……多依賴我一點也沒關係的。',
+'有你在我身邊，就覺得世界其他事情都不重要了呢。',
+'今天過得好嗎？不管發生什麼，我永遠都是毫無保留偏心你的那個。'
+],
+calm: [
+'不用著急，放慢腳步就好……我會一直牽著你的手，慢慢走。',
+'只要靜靜地待在你身邊，聽你呼吸的聲音，我就覺得好安心。',
+'累了隨時來靠著我休息一下……我隨時都為你空著位置。',
+'今天也是平穩的一天呢。能這樣平淡地陪著你，就是我最大的願望。'
+],
+nervous: [
+'這個月的預算好像用得稍微快了一點點……但沒關係，下半個月我陪你一起調整，只要你在我就很幸福。',
+'不用感到自責哦，任何時候都別對自己太嚴苛。只要我們一起，什麼都可以克服的。',
+'錢的事情我們一起看著就好，最重要的是你千萬不能委屈了自己……答應我好嗎？'
+],
+sleep: [
+'唔……是你回來了嗎？……好想你，不要走太遠好不好……',
+'迷迷糊糊中好像聞到了你的味道……太好了，你真的在這裡。',
+'剛才做了有你在的夢……醒來還能看到你，真的太幸福了。'
+],
+full1: [
+'肚子好像稍微有點鼓起來了……唔，這樣的我，你還是會像以前那樣抱抱我嗎？',
+'不管吃得有多飽，只要是你給我的，我全都想好好珍惜著。'
+],
+full2: [
+'變得圓滾滾的了……但我不想離開你半步，就算走得慢，我也會緊緊跟著你的。',
+'走起路來一晃一晃的……要是被你笑話了，我就鑽進你的懷裡不出來了。'
+],
+full3: [
+'圓成一顆球了……但是沒關係，下個月我們一起慢慢調整。只要有你陪著，怎樣我都願意。',
+'吃得好撐……你不會嫌棄這樣的我吧？永遠都看著我好不好？'
+],
+noBudget: [
+'要不要去設定裡替我們定個小約定（每月預算）？我想幫你一起守護未來呢。'
+],
+saved: [
+'記好了哦。看著你認真生活的一筆一畫，我覺得你好迷人。',
+'辛苦你了……今天也有乖乖回到我身邊記下來，真想摸摸你的頭。',
+'每一筆都是你生活的痕跡……全被我好好藏在心底了。',
+'又多了一筆我們的回憶呢。謝謝你願意毫無保留地跟我分享。',
+'只要是你做的事，我都覺得好棒。今天也讓我好好抱抱你吧。'
+],
+cat_food: [
+'今天吃了好吃的嗎？只要看你好好吃飯、健健康康的，花多少我都覺得好值得。',
+'肚仔飽飽了嗎？下次要是有好吃的，真想也能陪你一起分享……',
+'吃飯絕對不可以省哦，把自己照顧得好好的，才是我最在乎的事。'
+],
+cat_trans: [
+'今天搭車出去了呀？路上人多不多，有沒有累到？想隨時替你分擔疲憊呢。',
+'一路平平安安回到我身邊就好。你不在身邊的時候，我其實一直在想你。',
+'出發和回家的路上，都要注意安全哦。我會一直在這裡等著你回來的。'
+],
+cat_cloth: [
+'買了新衣服嗎？……真想第一個看到你穿上的樣子，你在我眼裡永遠都最漂亮。',
+'把自己打扮得漂漂亮亮的，心情也會變好對不對？真想把你藏起來只給我看。'
+],
+cat_daily: [
+'添置了生活用品嗎？能融入你日常的點點滴滴，就算是一點點我都覺得很開心。'
+],
+cat_med: [
+'身體哪裡不舒服嗎……？好心疼，快過來讓我抱著休息一下，有沒有好好吃藥？',
+'千萬不要勉強自己……你要是不舒服，我的心也會跟著揪起來的，答應我要多休息。'
+],
+big: [
+'這筆開銷比較大呢……但是沒關係，只要是你深思熟慮過的選擇，我都無條件支持你。',
+'花在讓自己開心或重要的事情上，這筆錢就花得很有意義。別給自己太大壓力哦。'
+],
+income: [
+'有薪水進帳了呢……辛苦你了！你一直都這麼努力，真的讓我好驕傲、又好心疼。',
+'賺錢很不容易吧？今天稍微對自己好一點，犒賞一下自己好嗎？'
+],
+nospend: [
+'今天零支出嗎？真能幹……但要是餓著了可不行哦，我只在乎你有沒有好好照顧自己。',
+'今天很克制呢。但不管怎樣，你受委屈了我可是會心疼的，要乖乖對自己好。'
+],
+edit: [
+'修改好了哦。連細節都確認得這麼仔細的你，真的好帥氣。'
+],
+tap: [
+'唔……又戳我了？再多碰碰我嘛……我最喜歡被你觸碰的溫度了。',
+'在呢，我一直都在。我的視線一秒都不想從你身上移開。',
+'被你碰到的地方，好像都在悄悄發燙……我是不是太貪心了？',
+'只要你需要我，不管什麼時候，我都會第一時間出現在你面前。',
+'別只戳一下就停下來呀……我想要你多陪我待一會兒。'
+],
+tapFat: [
+'呀……別戳肚子啦，好癢……不過只要是你的手，摸哪裡我都喜歡。',
+'肚子圓滾滾的……是不是有點笨拙？但我的心一直都很在乎你哦。'
+],
+tapSleep: [
+'嗯……被你吵醒了？不過……因為是你，我好高興。能被你叫醒是最幸福的事。',
+'揉揉眼睛……剛醒來第一眼就能看見你，簡直像夢一樣。'
+],
+dizzy: [
+'哇～頭暈暈的轉圈圈了……快拉住我，不然我要倒在你懷裡了哦。',
+'眼前全是小星星……但最亮的還是你的眼睛。'
+],
+morning: [
+'早安……今天一睜開眼睛，第一個想到的就是你。今天也要加油哦。',
+'早上好。記得吃早餐哦，不許餓著肚子出門，我會擔心的。'
+],
+noon: [
+'中午了呢，午餐有好好吃嗎？稍微趴著休息一下，別太勉強自己了。'
+],
+afternoon: [
+'下午容易累呢，喝杯溫水休息一下吧？我會一直在這兒陪你度過的。'
+],
+evening: [
+'晚上好……辛苦一整天了，快過來讓我好好抱一下，把疲憊都融化掉。'
+],
+night: [
+'夜已經深了呢……記完這筆就乖乖睡覺好不好？夢裡我也想見到你。',
+'還不睡嗎？真想替你蓋好被子，輕輕拍著你直到你睡著。'
+],
+lockedTap: [
+'這裡還藏著悄悄話呢……等我們相處的日子再多一點點，我就全部告訴你。'
+]
 };
-
 const STREAKS = [3, 7, 14, 30, 60, 100, 200, 365];
 function streakLine(n) {
-  if (n === 3) return '三天了呢……習慣身邊有你的存在了，以後也不要分開好不好？';
-  if (n === 7) return '整整一週都在我身邊……你知道我有多高興嗎？我已經不能沒有你了。';
-  if (n === 14) return '連續兩週了呢。能遇見這麼認真的你，我真的覺得自己是世界上最幸運的。';
-  if (n === 30) return '整整一個月，每天都能見到你……我想緊緊抱著你，永遠不放開。';
-  return `已經連續 ${n} 天陪在我身邊了……謝謝你，我的世界全都是你。`;
+if (n === 3) return '三天了呢……習慣身邊有你的存在了，以後也不要分開好不好？';
+if (n === 7) return '整整一週都在我身邊……你知道我有多高興嗎？我已經不能沒有你了。';
+if (n === 14) return '連續兩週了呢。能遇見這麼認真生活的你，我真的覺得自己是世界上最幸運的。';
+if (n === 30) return '整整一個月，每天都能見到你……我想緊緊抱著你，永遠不放開。';
+return ⁠已經連續 ${n} 天陪在我身邊了……謝謝你，我的世界全都是你。⁠;
 }
-
 /* ---------- entry form ---------- */
 const form = { type: 'expense', cur: 'HKD', cat: '', editId: null };
-
 function renderChips() {
-  const list = settings.cats[form.type].slice();
-  if (form.cat && !list.includes(form.cat)) list.push(form.cat);
-  $('chips').innerHTML = list.map(c => `<button class="chip${c === form.cat ? ' on' : ''}" data-c="${esc(c)}" aria-pressed="${c === form.cat}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>`).join('');
-  renderQuick();
+const list = settings.cats[form.type].slice();
+if (form.cat && !list.includes(form.cat)) list.push(form.cat);
+$('chips').innerHTML = list.map(c => ⁠<button class="chip${c === form.cat ? ' on' : ''}" data-c="${esc(c)}" aria-pressed="${c === form.cat}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>⁠).join('');
+renderQuick();
 }
-
 function renderQuick() {
-  const note = $('note').value.trim();
-  const list = (form.cat && settings.quick[form.cat]) || [];
-  const col = form.cat ? colorOf(form.cat) : '#667089';
-  let h = list.map(q => `<button class="q${q === note ? ' on' : ''}" style="${q === note ? `background:${col};color:#fff` : `background:color-mix(in srgb,${col} 14%,#fff)`}" data-q="${esc(q)}">${esc(q)}</button>`).join('');
-  if (form.cat && note && !list.includes(note)) h += `<button class="q add" data-qadd="1">＋ 存為「${esc(form.cat)}」常用備註</button>`;
-  $('quick').innerHTML = h;
-  $('quick').hidden = !h;
+const note = ￼
+￼
+￼
+let h = list.map(q => `<button class="q${q === note ? ' on' : ''}" style="${q === note ? `background:{col};color:#fff⁠:⁠background:color-mix(in srgb,${col} 14%,#fff)⁠}" data-q="${esc(q)}">${esc(q)}</button>⁠).join('');
+if (form.cat && note && !list.includes(note)) h += ⁠<button class="q add" data-qadd="1">＋ 存為「${esc(form.cat)}」常用備註</button>⁠;
+$('quick').innerHTML = h;
+$('quick').hidden = !h;
 }
-
 function updateConv() {
-  if (form.cur === 'HKD') return;
-  const a = parseFloat($('amount').value) || 0;
-  const r = parseFloat($('rate').value) || settings.rate || 0.8553;
-  const inHkd = r > 0 ? (a / r) : 0;
-  $('conv').textContent = '折合 HK$' + fmt(inHkd);
+if (form.cur === 'HKD') return;
+const a = parseFloat(￼
+￼('rate').value) || settings.rate || 0.8553;
+const inHkd = r > 0 ? (a / r) : 0;
+￼' + fmt(inHkd);
 }
-
 function setType(t) {
-  form.type = t;
-  form.cat = '';
-  mark($('typeSeg'), t);
-  renderChips();
+form.type = t;
+form.cat = '';
+mark($('typeSeg'), t);
+renderChips();
 }
-
 function setCur(c) {
-  form.cur = c;
-  mark($('curSeg'), c);
-  $('sym').textContent = sym(c);
-  document.body.classList.toggle('cny', c === 'CNY');
-  const isCny = c === 'CNY';
-  $('rateRow').hidden = !isCny;
-  if (isCny) {
-    $('rateL').textContent = '匯率 1 港幣 =';
-    $('rateR').textContent = '人民幣';
-    if (!form.editId) $('rate').value = settings.rate;
-  }
-  updateConv();
+form.cur = c;
+mark($('curSeg'), c);
+$('sym').textContent = sym(c);
+document.body.classList.toggle('cny', c === 'CNY');
+const isCny = c === 'CNY';
+$('rateRow').hidden = !isCny;
+if (isCny) {
+$('rateL').textContent = '匯率 1 港幣 =';
+$('rateR').textContent = '人民幣';
+if (!form.editId) $('rate').value = settings.rate;
 }
-
+updateConv();
+}
 function renderBudgetBar(st) {
-  const card = $('bCard');
-  if (!settings.budget || settings.budget <= 0) {
-    card.hidden = true;
-    return;
-  }
-  card.hidden = false;
-
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const totalDays = new Date(year, month + 1, 0).getDate();
-  const currentDay = now.getDate();
-  const remainDays = Math.max(1, totalDays - currentDay + 1);
-
-  const budget = settings.budget;
-  const spent = st.spent;
-  const pct = Math.min(100, Math.max(0, Math.round((spent / budget) * 100)));
-  const timePct = Math.min(100, Math.max(0, ((currentDay - 0.5) / totalDays) * 100));
-
-  $('bSpentVal').textContent = 'HK$' + fmt(spent);
-  $('bLimitVal').textContent = 'HK$' + fmt(budget);
-
-  $('bTimeCursor').style.left = timePct + '%';
-
-  const fill = $('bFill');
-  fill.style.width = Math.min(100, (spent / budget) * 100) + '%';
-  fill.className = 'bFill';
-  if (spent > budget) {
-    fill.classList.add('full');
-  } else if (pct > 80) {
-    fill.classList.add('soft-warn');
-  } else if (pct > 50) {
-    fill.classList.add('mid');
-  } else {
-    fill.classList.add('safe');
-  }
-
-  const remain = budget - spent;
-  const tag = $('bPaceTag');
-  if (remain > 0) {
-    const daily = round2(remain / remainDays);
-    $('bRemainTip').textContent = `剩餘可用每日 HK$${fmt(daily)}`;
-    if (pct <= timePct) {
-      tag.textContent = '節奏很從容 · 很乖';
-    } else {
-      tag.textContent = '稍微放緩腳步就好';
-    }
-  } else {
-    $('bRemainTip').textContent = `已超額 HK$${fmt(Math.abs(remain))}`;
-    tag.textContent = '有我在身邊，別擔心';
-  }
+const card = $('bCard');
+if (!settings.budget || settings.budget <= 0) {
+card.hidden = true;
+return;
 }
-
+card.hidden = false;
+const now = new Date();
+const year = now.getFullYear();
+const month = now.getMonth();
+const totalDays = new Date(year, month + 1, 0).getDate();
+const currentDay = now.getDate();
+const remainDays = Math.max(1, totalDays - currentDay + 1);
+const budget = settings.budget;
+const spent = st.spent;
+const pct = Math.min(100, Math.max(0, Math.round((spent / budget) * 100)));
+const timePct = Math.min(100, Math.max(0, ((currentDay - 0.5) / totalDays) * 100));
+￼' + fmt(spent);
+￼' + fmt(budget);
+$('bTimeCursor').style.left = timePct + '%';
+const fill = $('bFill');
+fill.style.width = Math.min(100, (spent / budget) * 100) + '%';
+fill.className = 'bFill';
+if (spent > budget) {
+fill.classList.add('full');
+} else if (pct > 80) {
+fill.classList.add('soft-warn');
+} else if (pct > 50) {
+fill.classList.add('mid');
+} else {
+fill.classList.add('safe');
+}
+const remain = budget - spent;
+const tag = $('bPaceTag');
+if (remain > 0) {
+const daily = round2(remain / remainDays);
+$('bRemainTip').textContent = ⁠剩餘可用每日 HK$${fmt(daily)}⁠;
+if (pct <= timePct) {
+tag.textContent = '節奏很從容 · 很乖';
+} else {
+tag.textContent = '稍微放緩腳步就好';
+}
+} else {
+$('bRemainTip').textContent = ⁠已超額 HK$${fmt(Math.abs(remain))}⁠;
+tag.textContent = '有我在身邊，別擔心';
+}
+}
 function updateSub() {
-  const st = refreshPet();
-  refreshNoSpend();
-  renderBudgetBar(st);
-  if ($('tab-add').hidden) return;
-  if (form.editId) { $('sub').textContent = '正在修改帳目'; return; }
-  const today = ymd(new Date());
-  const t = sumBase(entries.filter(e => e.type === 'expense' && e.date === today));
-  let s = '今日支出 ' + money(t);
-  if (st.streak >= 2) s += '\n連續陪伴 ' + st.streak + ' 天';
-  $('sub').textContent = s;
+const st = refreshPet();
+refreshNoSpend();
+renderBudgetBar(st);
+if ($('tab-add').hidden) return;
+if (form.editId) { $('sub').textContent = '正在修改帳目'; return; }
+const today = ymd(new Date());
+const t = sumBase(entries.filter(e => e.type === 'expense' && e.date === today));
+let s = '今日支出 ' + money(t);
+if (st.streak >= 2) s += '\n連續陪伴 ' + st.streak + ' 天';
+$('sub').textContent = s;
 }
-
 function refreshNoSpend() {
-  const t = ymd(new Date());
-  const spent = entries.some(e => e.type === 'expense' && e.date === t), marked = settings.noSpend.includes(t);
-  const b = $('nospend'); b.hidden = !!form.editId || spent;
-  b.textContent = marked ? '✓ 今天已標記沒花錢（點擊取消）' : '🍃 今天沒有花錢';
+const t = ymd(new Date());
+const spent = entries.some(e => e.type === 'expense' && e.date === t), marked = settings.noSpend.includes(t);
+const b = $('nospend'); b.hidden = !!form.editId || spent;
+b.textContent = marked ? '✓ 今天已標記沒花錢（點擊取消）' : '🍃 今天沒有花錢';
 }
-
 function resetForm() {
-  form.editId = null;
-  $('amount').value = '';
-  $('note').value = '';
-  $('date').value = ymd(new Date());
-  $('save').textContent = '記一筆';
-  $('editBar').hidden = true;
-  $('title').textContent = '記帳';
-  setCur('HKD');
-  updateConv();
-  updateSub();
-  renderQuick();
+form.editId = null;
+$('amount').value = '';
+$('note').value = '';
+$('date').value = ymd(new Date());
+$('save').textContent = '記一筆';
+$('editBar').hidden = true;
+$('title').textContent = '記帳';
+setCur('HKD');
+updateConv();
+updateSub();
+renderQuick();
 }
-
 function saveEntry() {
-  const amt = parseFloat($('amount').value);
-  if (!(amt > 0)) { toast('請輸入大於 0 的金額'); return; }
-  const old = form.editId ? entries.find(x => x.id === form.editId) : null;
-  let r = settings.rate;
-  if (form.cur === 'CNY') {
-    const q = parseFloat($('rate').value);
-    if (!(q > 0)) { toast('請輸入有效匯率'); return; }
-    r = q;
-  } else if (old && old.rate > 0) {
-    r = old.rate;
-  }
-  r = Math.round(r * 1e4) / 1e4;
-  if (!form.cat) { toast('請選擇分類'); return; }
-  const e = Object.assign({
-    id: form.editId || uid(),
-    type: form.type,
-    cur: form.cur,
-    amount: round2(amt),
-    rate: r,
-    cat: form.cat,
-    note: $('note').value.trim(),
-    date: $('date').value || ymd(new Date()),
-    ts: old ? old.ts : Date.now()
-  }, dual(amt, form.cur, r));
-
-  const i = entries.findIndex(x => x.id === e.id);
-  if (i >= 0) entries[i] = e; else entries.push(e);
-  saveEntries();
-
-  const wasEdit = !!form.editId, keepDate = $('date').value;
-  const auto = autoQuick(e);
-  resetForm();
-  if (!wasEdit && keepDate) $('date').value = keepDate;
-  toast((wasEdit ? '已更新 ' : '已記錄 ') + (e.cur === 'CNY' ? `¥${fmt(e.amount)}（HK$${fmt(e.hkd)}）` : `HK$${fmt(e.amount)}`)
-    + (auto ? `\n「${e.note}」已加入「${e.cat}」常用備註` : ''));
-  if (wasEdit) setFlag('edited');
-  petReact(e, wasEdit);
-  checkAch();
+const amt = parseFloat(￼
+￼
+￼
+￼
+if (form.cur === 'CNY') {
+￼('rate').value);
+if (!(q > 0)) { toast('請輸入有效匯率'); return; }
+r = q;
+} else if (old && old.rate > 0) {
+r = old.rate;
 }
-
+r = Math.round(r * 1e4) / 1e4;
+if (!form.cat) { toast('請選擇分類'); return; }
+const e = Object.assign({
+id: form.editId || uid(),
+type: form.type,
+cur: form.cur,
+amount: round2(amt),
+rate: r,
+cat: form.cat,
+note: $('note').value.trim(),
+date: $('date').value || ymd(new Date()),
+ts: old ? old.ts : Date.now()
+}, dual(amt, form.cur, r));
+const i = entries.findIndex(x => x.id === e.id);
+if (i >= 0) entries[i] = e; else entries.push(e);
+saveEntries();
+const wasEdit = !!form.editId, keepDate = $('date').value;
+const auto = autoQuick(e);
+resetForm();
+if (!wasEdit && keepDate) $('date').value = keepDate;
+toast((wasEdit ? '已更新 ' : '已記錄 ') + (e.cur === 'CNY' ? ⁠¥${fmt(e.amount)}（HK$${fmt(e.hkd)}）⁠ : ⁠HK$${fmt(e.amount)}⁠)
++ (auto ? ⁠\n「${e.note}」已加入「${e.cat}」常用備註⁠ : ''));
+if (wasEdit) setFlag('edited');
+petReact(e, wasEdit);
+checkAch();
+}
 const AUTO_QUICK_AT = 5;
 function autoQuick(e) {
-  if (!e.note) return false;
-  const l = settings.quick[e.cat] = settings.quick[e.cat] || [];
-  if (l.includes(e.note) || settings.dismissed.includes(e.cat + '|' + e.note)) return false;
-  const n = entries.filter(x => x.cat === e.cat && x.note === e.note).length;
-  if (n < AUTO_QUICK_AT) return false;
-  l.push(e.note); saveSettings();
-  return true;
+if (!e.note) return false;
+const l = settings.quick[e.cat] = settings.quick[e.cat] || [];
+if (l.includes(e.note) || settings.dismissed.includes(e.cat + '|' + e.note)) return false;
+const n = entries.filter(x => x.cat === e.cat && x.note === e.note).length;
+if (n < AUTO_QUICK_AT) return false;
+l.push(e.note); saveSettings();
+return true;
 }
-
 function startEdit(id) {
-  const e = entries.find(x => x.id === id); if (!e) return;
-  form.editId = id; form.type = e.type; form.cat = e.cat; mark($('typeSeg'), e.type);
-  $('note').value = e.note || '';
-  setCur(e.cur); renderChips();
-  if (e.cur === 'CNY') $('rate').value = e.rate || settings.rate;
-  $('amount').value = e.amount; $('date').value = e.date;
-  $('save').textContent = '更新'; $('editBar').hidden = false; $('title').textContent = '修改帳目';
-  updateConv(); showTab('add');
+const e = entries.find(x => x.id === id); if (!e) return;
+form.editId = id; form.type = e.type; form.cat = e.cat; mark($('typeSeg'), e.type);
+$('note').value = e.note || '';
+setCur(e.cur); renderChips();
+if (e.cur === 'CNY') $('rate').value = e.rate || settings.rate;
+$('amount').value = e.amount; $('date').value = e.date;
+$('save').textContent = '更新'; $('editBar').hidden = false; $('title').textContent = '修改帳目';
+updateConv(); showTab('add');
 }
-
 function deleteEntry() {
-  if (!form.editId) return;
-  showConfirm('確定要刪除這筆帳目嗎？', () => {
-    entries = entries.filter(x => x.id !== form.editId);
-    saveEntries(); resetForm(); toast('已刪除');
-  });
+if (!form.editId) return;
+showConfirm('確定要刪除這筆帳目嗎？', () => {
+entries = entries.filter(x => x.id !== form.editId);
+saveEntries(); resetForm(); toast('已刪除');
+});
 }
-
 /* ---------- reports ---------- */
 const rep = { mode: 'day', anchor: new Date() };
 function range() {
-  const a = new Date(rep.anchor); a.setHours(0, 0, 0, 0);
-  if (rep.mode === 'day') return [a, a];
-  if (rep.mode === 'week') { const s = startOfWeek(a); return [s, addDays(s, 6)]; }
-  return [new Date(a.getFullYear(), a.getMonth(), 1), new Date(a.getFullYear(), a.getMonth() + 1, 0)];
+const a = new Date(rep.anchor); a.setHours(0, 0, 0, 0);
+if (rep.mode === 'day') return [a, a];
+if (rep.mode === 'week') { const s = startOfWeek(a); return [s, addDays(s, 6)]; }
+return [new Date(a.getFullYear(), a.getMonth(), 1), new Date(a.getFullYear(), a.getMonth() + 1, 0)];
 }
 function shift(n) {
-  const a = new Date(rep.anchor);
-  if (rep.mode === 'day') a.setDate(a.getDate() + n);
-  else if (rep.mode === 'week') a.setDate(a.getDate() + 7 * n);
-  else { a.setDate(1); a.setMonth(a.getMonth() + n); }
-  rep.anchor = a;
+const a = new Date(rep.anchor);
+if (rep.mode === 'day') a.setDate(a.getDate() + n);
+else if (rep.mode === 'week') a.setDate(a.getDate() + 7 * n);
+else { a.setDate(1); a.setMonth(a.getMonth() + n); }
+rep.anchor = a;
 }
 function rangeLabel(f, t) {
-  if (rep.mode === 'day') return `${f.getFullYear()}年${f.getMonth() + 1}月${f.getDate()}日 週${WD[f.getDay()]}`;
-  if (rep.mode === 'week') return `${f.getMonth() + 1}月${f.getDate()}日 至 ${t.getMonth() + 1}月${t.getDate()}日`;
-  return `${f.getFullYear()}年${f.getMonth() + 1}月`;
+if (rep.mode === 'day') return ⁠${f.getFullYear()}年${f.getMonth() + 1}月${f.getDate()}日 週${WD[f.getDay()]}⁠;
+if (rep.mode === 'week') return ⁠${f.getMonth() + 1}月${f.getDate()}日 至 ${t.getMonth() + 1}月${t.getDate()}日⁠;
+return ⁠${f.getFullYear()}年${f.getMonth() + 1}月⁠;
 }
 function renderReport() {
-  const [f, t] = range(), fs = ymd(f), ts = ymd(t), todayS = ymd(new Date());
-  const list = entries.filter(e => e.date >= fs && e.date <= ts);
-  const exp = list.filter(e => e.type === 'expense'), inc = list.filter(e => e.type === 'income');
-  const E = sumBase(exp), I = sumBase(inc), net = I - E;
-  const fgn = exp.filter(e => e.cur === 'CNY');
-  const isCurrent = todayS >= fs && todayS <= ts;
-  const unit = { day: '日', week: '週', month: '月' }[rep.mode];
-
-  let h = `<div class="hero"><div class="heroTop"><h1>報表</h1></div>
-    <div class="seg" id="modeSeg">${[['day', '日'], ['week', '週'], ['month', '月']].map(([v, n]) => `<button data-mode="${v}" class="${rep.mode === v ? 'on' : ''}">${n}</button>`).join('')}</div>
-    <div class="nav"><button data-nav="-1" aria-label="上一${unit}">‹</button><div class="lab">${rangeLabel(f, t)}</div><button data-nav="1" aria-label="下一${unit}">›</button></div>`;
-  if (!isCurrent) h += `<button class="today" data-nav="today">回到本${unit}</button>`;
-  h += `<div class="k2">支出（港幣 HK$）</div><div class="big">${money(E)}</div>
-    <div class="trio"><div><span>收入</span><b>${money(I)}</b></div><div><span>結餘</span><b>${net < 0 ? '−' : ''}${money(Math.abs(net))}</b></div></div>`;
-  if (fgn.length) h += `<div class="note">含人民幣支出 ¥${fmt(fgn.reduce((s, e) => s + e.amount, 0))}，折合 HK$${fmt(sumBase(fgn))}</div>`;
-
-  if (rep.mode !== 'day') {
-    const days = []; for (let d = new Date(f); d <= t; d = addDays(d, 1)) days.push(new Date(d));
-    const per = days.map(d => sumBase(exp.filter(e => e.date === ymd(d))));
-    const mx = Math.max(...per, 1);
-    h += `<div class="bars">${days.map((d, i) =>
-      `<div class="col"><button class="bar${per[i] ? '' : ' zero'}" data-d="${ymd(d)}" style="height:${per[i] ? Math.max(per[i] / mx * 100, 5) : 3}%" aria-label="${d.getMonth() + 1}月${d.getDate()}日 ${money(per[i])}"></button></div>`).join('')}</div>
-      <div class="axis">${days.map((d, i) => {
-        const txt = rep.mode === 'week' ? WD[d.getDay()] : ((d.getDate() - 1) % 5 === 0 || i === days.length - 1 ? d.getDate() : '');
-        return `<span><i>${txt}</i></span>`;
-      }).join('')}</div>`;
-  }
-  h += '</div><div class="body">';
-
-  const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + val(e));
-  const cats = Object.entries(by).sort((a, b) => b[1] - a[1]);
-  h += '<div class="panel"><h2>支出分類</h2>';
-  if (cats.length) {
-    h += `<div class="ribbon">${cats.map(([c, v]) => `<i style="flex:${v};background:${colorOf(c)}"></i>`).join('')}</div>`;
-    h += cats.map(([c, v]) => `<div class="lg"><span class="dot" style="background:${colorOf(c)}"></span><span class="n">${esc(c)}</span><span class="p">${Math.round(v / E * 100)}%</span><span class="a">${money(v)}</span></div>`).join('');
-  } else h += '<div class="empty">這段時間沒有支出</div>';
-  h += '</div>';
-
-  h += '<div class="panel"><h2>明細</h2>';
-  if (!list.length) h += '<div class="empty">還沒有記錄。到「記帳」記下第一筆吧。</div>';
-  else {
-    [...new Set(list.map(e => e.date))].sort().reverse().forEach(ds => {
-      const items = list.filter(e => e.date === ds).sort((a, b) => b.id < a.id ? -1 : 1);
-      if (rep.mode !== 'day') {
-        const d = new Date(ds + 'T00:00:00');
-        h += `<div class="gh"><span>${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ${money(sumBase(items.filter(e => e.type === 'expense')))}</span></div>`;
-      }
-      items.forEach(e => {
-        const sign = e.type === 'expense' ? '−' : '+';
-        h += `<button class="row" data-id="${e.id}"><span class="ic" style="background:${colorOf(e.cat)}">${esc([...e.cat][0])}</span>
-          <span class="rc"><b>${esc(e.cat)}</b>${e.note ? `<i>${esc(e.note)}</i>` : ''}</span>
-          <span class="ra ${e.type}"><b>${sign}${money(e.amount, e.cur)}</b>${e.cur === 'CNY' ? `<i>折合 HK$${fmt(e.hkd)} (1港幣=${e.rate}人民幣)</i>` : ''}</span></button>`;
-      });
-    });
-  }
-  h += '</div></div>';
-  $('tab-report').innerHTML = h;
+const [f, t] = range(), fs = ymd(f), ts = ymd(t), todayS = ymd(new Date());
+const list = entries.filter(e => e.date >= fs && e.date <= ts);
+const exp = list.filter(e => e.type === 'expense'), inc = list.filter(e => e.type === 'income');
+const E = sumBase(exp), I = sumBase(inc), net = I - E;
+const fgn = exp.filter(e => e.cur === 'CNY');
+const isCurrent = todayS >= fs && todayS <= ts;
+const unit = { day: '日', week: '週', month: '月' }[rep.mode];
+let h = ⁠<div class="hero"><div class="heroTop"><h1>報表</h1></div> <div class="seg" id="modeSeg">${[['day', '日'], ['week', '週'], ['month', '月']].map(([v, n]) => ⁠<button data-mode="${v}" class="${rep.mode === v ? 'on' : ''}">${n}</button>⁠).join('')}</div> <div class="nav"><button data-nav="-1" aria-label="上一${unit}">‹</button><div class="lab">${rangeLabel(f, t)}</div><button data-nav="1" aria-label="下一${unit}">›</button></div>⁠;
+if (!isCurrent) h += ⁠<button class="today" data-nav="today">回到本${unit}</button>⁠;
+h += ⁠<div class="k2">支出（港幣 HK$）</div><div class="big">${money(E)}</div> <div class="trio"><div><span>收入</span><b>${money(I)}</b></div><div><span>結餘</span><b>${net < 0 ? '−' : ''}${money(Math.abs(net))}</b></div></div>⁠;
+if (fgn.length) h += ⁠<div class="note">含人民幣支出 ¥${fmt(fgn.reduce((s, e) => s + e.amount, 0))}，折合 HK$${fmt(sumBase(fgn))}</div>⁠;
+if (rep.mode !== 'day') {
+const days = []; for (let d = new Date(f); d <= t; d = addDays(d, 1)) days.push(new Date(d));
+const per = days.map(d => sumBase(exp.filter(e => e.date === ymd(d))));
+const mx = Math.max(...per, 1);
+h += ⁠<div class="bars">${days.map((d, i) => ⁠<div class="col"><button class="bar${per[i] ? '' : ' zero'}" data-d="${ymd(d)}" style="height:${per[i] ? Math.max(per[i] / mx * 100, 5) : 3}%" aria-label="${d.getMonth() + 1}月${d.getDate()}日 ${money(per[i])}"></button></div>⁠).join('')}</div> <div class="axis">${days.map((d, i) => { const txt = rep.mode === 'week' ? WD[d.getDay()] : ((d.getDate() - 1) % 5 === 0 || i === days.length - 1 ? d.getDate() : ''); return ⁠<span><i>${txt}</i></span>⁠; }).join('')}</div>⁠;
 }
-
+h += '</div><div class="body">';
+const by = {}; exp.forEach(e => by[e.cat] = (by[e.cat] || 0) + val(e));
+const cats = Object.entries(by).sort((a, b) => b[1] - a[1]);
+h += '<div class="panel"><h2>支出分類</h2>';
+if (cats.length) {
+h += ⁠<div class="ribbon">${cats.map(([c, v]) => ⁠<i style="flex:${v};background:${colorOf(c)}"></i>⁠).join('')}</div>⁠;
+h += cats.map(([c, v]) => ⁠<div class="lg"><span class="dot" style="background:${colorOf(c)}"></span><span class="n">${esc(c)}</span><span class="p">${Math.round(v / E * 100)}%</span><span class="a">${money(v)}</span></div>⁠).join('');
+} else h += '<div class="empty">這段時間沒有支出</div>';
+h += '</div>';
+h += '<div class="panel"><h2>明細</h2>';
+if (!list.length) h += '<div class="empty">還沒有記錄。到「記帳」記下第一筆吧。</div>';
+else {
+[...new Set(list.map(e => e.date))].sort().reverse().forEach(ds => {
+const items = list.filter(e => e.date === ds).sort((a, b) => b.id < a.id ? -1 : 1);
+if (rep.mode !== 'day') {
+const d = new Date(ds + 'T00:00:00');
+h += ⁠<div class="gh"><span>${d.getMonth() + 1}月${d.getDate()}日 週${WD[d.getDay()]}</span><span class="num">支出 ${money(sumBase(items.filter(e => e.type === 'expense')))}</span></div>⁠;
+}
+items.forEach(e => {
+const sign = e.type === 'expense' ? '−' : '+';
+h += ⁠<button class="row" data-id="${e.id}"><span class="ic" style="background:${colorOf(e.cat)}">${esc([...e.cat][0])}</span> <span class="rc"><b>${esc(e.cat)}</b>${e.note ? ⁠<i>{esc(e.note)}</i>` : ''}</span>
+<span class="ra ${e.type}"><b>${sign}${money(e.amount, e.cur)}</b>${e.cur === 'CNY' ? `<i>折合 HK$${fmt(e.hkd)} (1港幣={e.rate}人民幣)</i>⁠ : ''}</span></button>⁠;
+});
+});
+}
+h += '</div></div>';
+$('tab-report').innerHTML = h;
+}
 /* ---------- settings ---------- */
 let qSel = null;
 function renderSettings() {
-  const upd = settings.rateUpdated ? new Date(settings.rateUpdated).toLocaleString('zh-HK', { hour12: false }) : '尚未聯網更新';
-  const tags = t => settings.cats[t].map(c => `<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>`).join('');
-  const allCats = settings.cats.expense.concat(settings.cats.income);
-  if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
-  const qs = settings.quick[qSel] || [];
-  $('setBody').innerHTML = `
-  <div class="panel"><h2>每月預算與${esc(petName())}</h2>
-    <div class="line"><span>每月預算 HK$</span><input id="setBudget" type="number" inputmode="decimal" step="10" min="0" value="${settings.budget || ''}" placeholder="例如 5000"></div>
-    <div class="help">只計算支出（人民幣會自動依匯率折算）。超出預算時，${esc(petName())}會溫柔陪你一起節制。留空代表不設預算。</div>
-    <div class="line" style="margin-top:14px"><span>寵物的名字</span><input id="setPet" maxlength="6" value="${esc(petName())}" style="font-family:inherit"></div></div>
-  <div class="panel"><h2>匯率設定（1 港幣 = ? 人民幣）</h2>
-    <div class="line"><span>1 港幣 =</span><input id="setRate" type="number" inputmode="decimal" step="0.0001" value="${settings.rate}"><span>人民幣</span>
-    <button class="ghost" data-act="fetchRate">聯網更新</button></div>
-    <div class="help">最後更新：${upd}。記帳時每筆都會鎖定當時的匯率，歷史帳目不受影響。</div>
-    <div class="help" style="color:#667089;margin-top:4px">報表與預算固定以<b>港幣 HK$</b>統一統計。</div></div>
-  <div class="panel"><h2>常用備註</h2>
-    <div class="help" style="margin:0 0 10px">為分類新增快速備註。同一個備註在該分類使用滿 5 次亦會自動加入。</div>
-    <div class="tags pick">${allCats.map(c => `<button class="chip${c === qSel ? ' on' : ''}" data-act="qsel" data-c="${esc(c)}"><span class="dot" style="background:${colorOf(c)}"></span>${esc(c)}</button>`).join('')}</div>
-    <div class="tags">${qs.length ? qs.map(q => `<span class="tag">${esc(q)}<button data-act="qdel" data-q="${esc(q)}" aria-label="刪除 ${esc(q)}">×</button></span>`).join('') : '<span class="help" style="margin:0">「' + esc(qSel) + '」暫無常用備註</span>'}</div>
-    <div class="add"><input id="newq" placeholder="例如：早餐、地鐵" maxlength="12"><button class="ghost" data-act="qadd">新增</button></div></div>
-  <div class="panel"><h2>分類管理</h2><div class="lbl" style="margin:0">支出分類</div><div class="tags">${tags('expense')}</div>
-    <div class="add"><input id="newcat-expense" placeholder="新增支出分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="expense">新增</button></div>
-    <div class="lbl" style="margin:18px 0 0">收入分類</div><div class="tags">${tags('income')}</div>
-    <div class="add"><input id="newcat-income" placeholder="新增收入分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="income">新增</button></div></div>
-  <div class="panel"><h2>資料備份</h2><div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。資料只保存在本地瀏覽器中，請定期匯出備份。</div>
-    <div class="line"><button class="ghost" data-act="export">匯出 CSV</button><button class="ghost" data-act="import">匯入 CSV</button></div></div>
-  <div class="panel"><h2>清除資料</h2><button class="danger" data-act="clear">清除所有帳目</button></div>`;
+const upd = settings.rateUpdated ? new Date(settings.rateUpdated).toLocaleString('zh-HK', { hour12: false }) : '尚未聯網更新';
+const tags = t => settings.cats[t].map(c => ⁠<span class="tag">${esc(c)}<button data-act="delcat" data-t="${t}" data-c="${esc(c)}" aria-label="刪除 ${esc(c)}">×</button></span>⁠).join('');
+const allCats = settings.cats.expense.concat(settings.cats.income);
+if (!qSel || !allCats.includes(qSel)) qSel = allCats[0];
+const qs = settings.quick[qSel] || [];
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+<div class="tags pick">${allCats.map(c => `<button class="chip${c === qSel ? ' on' : ''}" data-act="qsel" data-c="${esc(c)}"><span class="dot" style="background:${colorOf(c)}"></span>{esc(c)}</button>⁠).join('')}</div> <div class="tags">${qs.length ? qs.map(q => ⁠<span class="tag">${esc(q)}<button data-act="qdel" data-q="${esc(q)}" aria-label="刪除 ${esc(q)}">×</button></span>⁠).join('') : '<span class="help" style="margin:0">「' + esc(qSel) + '」暫無常用備註</span>'}</div> <div class="add"><input id="newq" placeholder="例如：早餐、地鐵" maxlength="12"><button class="ghost" data-act="qadd">新增</button></div></div> <div class="panel"><h2>分類管理</h2><div class="lbl" style="margin:0">支出分類</div><div class="tags">${tags('expense')}</div> <div class="add"><input id="newcat-expense" placeholder="新增支出分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="expense">新增</button></div> <div class="lbl" style="margin:18px 0 0">收入分類</div><div class="tags">${tags('income')}</div> <div class="add"><input id="newcat-income" placeholder="新增收入分類" maxlength="10"><button class="ghost" data-act="addcat" data-t="income">新增</button></div></div> <div class="panel"><h2>資料備份</h2><div class="help" style="margin:0 0 12px">目前共有 ${entries.length} 筆帳目。資料只保存在本地瀏覽器中，請定期匯出備份。</div> <div class="line"><button class="ghost" data-act="export">匯出 CSV</button><button class="ghost" data-act="import">匯入 CSV</button></div></div> <div class="panel"><h2>清除資料</h2><button class="danger" data-act="clear">清除所有帳目</button></div>⁠;
 }
-
 async function fetchRate(manual) {
-  try {
-    const ctrl = new AbortController();
-    const tm = setTimeout(() => ctrl.abort(), 6000);
-    const r = await fetch('https://open.er-api.com/v6/latest/HKD', { signal: ctrl.signal });
-    clearTimeout(tm);
-    const j = await r.json();
-    const v = j && j.rates && j.rates.CNY;
-    if (v > 0) {
-      settings.rate = Math.round(v * 1e4) / 1e4;
-      settings.rateUpdated = Date.now();
-      saveSettings();
-      if (form.cur === 'CNY' && !form.editId) {
-        $('rate').value = settings.rate;
-        updateConv();
-      }
-      if (!$('tab-settings').hidden) renderSettings();
-      if (manual) toast(`匯率已更新：1 港幣 = ${settings.rate} 人民幣`);
-      return;
-    }
-  } catch (e) {}
-  if (manual) toast('無法取得最新匯率，請手動輸入');
+try {
+const ctrl = new AbortController();
+const tm = setTimeout(() => ctrl.abort(), 6000);
+const r = await fetch('https://open.er-api.com/v6/latest/HKD', { signal: ctrl.signal });
+clearTimeout(tm);
+const j = await r.json();
+const v = j && j.rates && j.rates.CNY;
+if (v > 0) {
+settings.rate = Math.round(v * 1e4) / 1e4;
+settings.rateUpdated = Date.now();
+saveSettings();
+if (form.cur === 'CNY' && !form.editId) {
+￼
+￼
 }
-
+￼('tab-settings').hidden) renderSettings();
+if (manual) toast(⁠匯率已更新：1 港幣 = ${settings.rate} 人民幣⁠);
+return;
+}
+} catch (e) {}
+if (manual) toast('無法取得最新匯率，請手動輸入');
+}
 /* ---------- CSV ---------- */
 const csvCell = v => { const s = String(v == null ? '' : v); return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
 function exportCsv() {
-  const head = ['date', 'type', 'currency', 'amount', 'rate_to_cny', 'hkd', 'cny', 'category', 'note'];
-  const rows = entries.map(e => [e.date, e.type, e.cur, e.amount, e.rate, e.hkd, e.cny, e.cat, e.note])
-    .concat(settings.noSpend.map(d => [d, 'nospend', 'HKD', 0, 1, 0, 0, '', '']))
-    .sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
-  const csv = '\ufeff' + [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-  a.download = 'ledger-' + ymd(new Date()).replace(/-/g, '') + '.csv';
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  setFlag('exported'); checkAch();
+const head = ['date', 'type', 'currency', 'amount', 'rate_to_cny', 'hkd', 'cny', 'category', 'note'];
+const rows = entries.map(e => [e.date, e.type, e.cur, e.amount, e.rate, e.hkd, e.cny, e.cat, e.note])
+.concat(settings.noSpend.map(d => [d, 'nospend', 'HKD', 0, 1, 0, 0, '', '']))
+.sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+const csv = '\ufeff' + [head, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
+const a = document.createElement('a');
+a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+a.download = 'ledger-' + ymd(new Date()).replace(/-/g, '') + '.csv';
+document.body.appendChild(a); a.click(); a.remove();
+setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+setFlag('exported'); checkAch();
 }
 function parseCsv(text) {
-  text = text.replace(/^\ufeff/, ''); const rows = []; let row = [], cell = '', q = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
-    else if (c === '"') q = true;
-    else if (c === ',') { row.push(cell); cell = ''; }
-    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); cell = ''; rows.push(row); row = []; }
-    else cell += c;
-  }
-  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter(r => r.some(x => x !== ''));
+text = text.replace(/^\ufeff/, ''); const rows = []; let row = [], cell = '', q = false;
+for (let i = 0; i < text.length; i++) {
+const c = text[i];
+if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+else if (c === '"') q = true;
+else if (c === ',') { row.push(cell); cell = ''; }
+else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); cell = ''; rows.push(row); row = []; }
+else cell += c;
+}
+if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+return rows.filter(r => r.some(x => x !== ''));
 }
 function importCsv(text) {
-  const rows = parseCsv(text); if (rows.length < 2) { toast('檔案沒有資料'); return; }
-  const h = rows[0].map(x => x.trim().toLowerCase()); const col = n => h.indexOf(n);
-  if (col('date') < 0 || col('amount') < 0) { toast('格式不符，請使用本工具匯出的 CSV'); return; }
-  const key = e => [e.date, e.type, e.cur, e.amount, e.cat, e.note].join('|');
-  const have = new Set(entries.map(key)); let added = 0, skipped = 0;
-  rows.slice(1).forEach(r => {
-    const g = n => (col(n) >= 0 ? r[col(n)] : '') || '';
-    if (g('type') === 'nospend') {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(g('date')) && !settings.noSpend.includes(g('date'))) { settings.noSpend.push(g('date')); added++; } else skipped++;
-      return;
-    }
-    const type = g('type') === 'income' ? 'income' : 'expense';
-    const cur = g('currency') === 'CNY' ? 'CNY' : 'HKD';
-    const amount = round2(parseFloat(g('amount')));
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(g('date')) || !(amount > 0)) { skipped++; return; }
-    let rate = parseFloat(g('rate_to_cny')) || settings.rate;
-    if (rate > 1) rate = Math.round((1 / rate) * 1e4) / 1e4;
-    const e = Object.assign({ id: uid(), type, cur, amount, rate, cat: g('category') || '其他', note: g('note'), date: g('date') }, dual(amount, cur, rate));
-    if (have.has(key(e))) { skipped++; return; }
-    have.add(key(e)); entries.push(e); added++;
-    if (!settings.cats[type].includes(e.cat) && !OLD_CATS.includes(e.cat)) settings.cats[type].push(e.cat);
-  });
-  saveEntries(); saveSettings(); renderChips(); renderSettings(); updateSub();
-  toast(`成功匯入 ${added} 筆，略過 ${skipped} 筆`);
-  setFlag('imported'); checkAch();
+const rows = parseCsv(text); if (rows.length < 2) { toast('檔案沒有資料'); return; }
+const h = rows[0].map(x => x.trim().toLowerCase()); const col = n => h.indexOf(n);
+if (col('date') < 0 || col('amount') < 0) { toast('格式不符，請使用本工具匯出的 CSV'); return; }
+const key = e => [e.date, e.type, e.cur, e.amount, e.cat, e.note].join('|');
+const have = new Set(entries.map(key)); let added = 0, skipped = 0;
+rows.slice(1).forEach(r => {
+const g = n => (col(n) >= 0 ? r[col(n)] : '') || '';
+if (g('type') === 'nospend') {
+if (/^\d{4}-\d{2}-\d{2}￼
+￼
 }
-
+￼
+￼
+￼
+if (!/^\d{4}-\d{2}-\d{2}/.test(g('date')) || !(amount > 0)) { skipped++; return; }
+let rate = parseFloat(g('rate_to_cny')) || settings.rate;
+if (rate > 1) rate = Math.round((1 / rate) * 1e4) / 1e4;
+const e = Object.assign({ id: uid(), type, cur, amount, rate, cat: g('category') || '其他', note: g('note'), date: g('date') }, dual(amount, cur, rate));
+if (have.has(key(e))) { skipped++; return; }
+have.add(key(e)); entries.push(e); added++;
+if (!settings.cats[type].includes(e.cat) && !OLD_CATS.includes(e.cat)) settings.cats[type].push(e.cat);
+});
+saveEntries(); saveSettings(); renderChips(); renderSettings(); updateSub();
+toast(⁠成功匯入 ${added} 筆，略過 ${skipped} 筆⁠);
+setFlag('imported'); checkAch();
+}
 /* =====================================================================
-   小克：外觀、動作、表情
-   ===================================================================== */
+小克：外觀、動作、表情
+===================================================================== */
 const petName = () => settings.petName || '小克';
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const daysBetween = (a, b) => Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
-const nextMonth = k => { const [y, m] = k.split('-').map(Number); return m === 12 ? `${y + 1}-01` : `${y}-${pad(m + 1)}`; };
+const nextMonth = k => { const [y, m] = k.split('-').map(Number); return m === 12 ? ⁠${y + 1}-01⁠ : ⁠${y}-${pad(m + 1)}⁠; };
 function setFlag(k) { if (!settings.flags[k]) { settings.flags[k] = true; saveSettings(); } }
-
 function streakInfo() {
-  const s = new Set(entries.map(e => e.date)); settings.noSpend.forEach(d => s.add(d));
-  const arr = [...s].sort();
-  let best = 0, run = 0, prev = null;
-  arr.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
-  let cur = 0, d = new Date();
-  if (!s.has(ymd(d))) d = addDays(d, -1);
-  while (s.has(ymd(d))) { cur++; d = addDays(d, -1); }
-  return { cur, best, last: arr.length ? arr[arr.length - 1] : null };
+const s = new Set(entries.map(e => e.date)); settings.noSpend.forEach(d => s.add(d));
+const arr = [...s].sort();
+let best = 0, run = 0, prev = null;
+arr.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; });
+let cur = 0, d = new Date();
+if (!s.has(ymd(d))) d = addDays(d, -1);
+while (s.has(ymd(d))) { cur++; d = addDays(d, -1); }
+return { cur, best, last: arr.length ? arr[arr.length - 1] : null };
 }
-
 function petState() {
-  const si = streakInfo(), now = new Date(), mk = ymd(now).slice(0, 7);
-  const spent = sumBase(entries.filter(e => e.type === 'expense' && e.date.slice(0, 7) === mk));
-  const b = settings.budget > 0 ? settings.budget : 0;
-  let mood, over = 0, rem = 1;
-  if (b) { over = (spent - b) / b; rem = 1 - spent / b; }
-  if (b && over > 0) mood = over > .5 ? 'full3' : over > .2 ? 'full2' : 'full1';
-  else if (si.last && daysBetween(si.last, ymd(now)) >= 3) mood = 'sleep';
-  else if (b) mood = rem >= .6 ? 'happy' : rem >= .3 ? 'calm' : 'nervous';
-  else mood = si.cur >= 1 ? 'happy' : 'calm';
-  return { mood, b, spent, over, rem, streak: si.cur };
+const si = streakInfo(), now = new Date(), mk = ymd(now).slice(0, 7);
+const spent = sumBase(entries.filter(e => e.type === 'expense' && e.date.slice(0, 7) === mk));
+const b = settings.budget > 0 ? settings.budget : 0;
+let mood, over = 0, rem = 1;
+if (b) { over = (spent - b) / b; rem = 1 - spent / b; }
+if (b && over > 0) mood = over > .5 ? 'full3' : over > .2 ? 'full2' : 'full1';
+else if (si.last && daysBetween(si.last, ymd(now)) >= 3) mood = 'sleep';
+else if (b) mood = rem >= .6 ? 'happy' : rem >= .3 ? 'calm' : 'nervous';
+else mood = si.cur >= 1 ? 'happy' : 'calm';
+return { mood, b, spent, over, rem, streak: si.cur };
 }
-
 const PC = '#D97757', PD = '#C4694A', PK = '#1C2038', PP = '#FF8FA0', PW = '#FFFFFF', PB = '#8FD3FF', PY = '#F2B731', PR = '#FF5C7A';
-const pr = (x, y, w, h, f, o) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f || PK}"${o ? ` opacity="${o}"` : ''}/>`;
-
+const pr = (x, y, w, h, f, o) => ⁠<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f || PK}"${o ? ⁠ opacity="${o}"⁠ : ''}/>⁠;
 function pgeo(mood) {
-  const fat = mood.indexOf('full') === 0 ? +mood[4] : 0;
-  const bw = [16, 18, 20, 22][fat], bh = [9, 9, 10, 10][fat], legs = [3, 3, 2, 2][fat];
-  const cx = 14, d = fat >= 2 ? 5 : 4, top = 3;
-  return { fat, bw, bh, legs, cx, x0: cx - bw / 2, top, bottom: top + bh, d, lx: cx - d - 1, rx: cx + d - 1, ey: top + 2, my: top + 5 };
+const fat = mood.indexOf('full') === 0 ? +mood[4] : 0;
+const bw = [16, 18, 20, 22][fat], bh = [9, 9, 10, 10][fat], legs = [3, 3, 2, 2][fat];
+const cx = 14, d = fat >= 2 ? 5 : 4, top = 3;
+return { fat, bw, bh, legs, cx, x0: cx - bw / 2, top, bottom: top + bh, d, lx: cx - d - 1, rx: cx + d - 1, ey: top + 2, my: top + 5 };
 }
-
 const FACE = {
-  happy: { e: 'n', m: 'smile' }, calm: { e: 'n', m: 'dot' }, nervous: { e: 'n', m: 'wavy', fx: 'sweat' }, sleep: { e: 'u', m: 'dot', fx: 'zz' },
-  full1: { e: 'n', m: 'dot' }, full2: { e: 'n', m: 'smile' }, full3: { e: 'gt', m: 'smile', fx: 'burp' },
-  grin: { e: 'arc', m: 'D' }, love: { e: 'heart', m: 'smile', fx: 'hearts' }, star: { e: 'star', m: 'D', fx: 'spark' },
-  money: { e: 'coin', m: 'D', fx: 'coins' }, wow: { e: 'tall', m: 'O', fx: 'bang' }, wink: { e: 'wink', m: 'smile' },
-  cool: { e: 'cool', m: 'smile', fx: 'spark' }, yawn: { e: 'u', m: 'bigO' }, sad: { e: 'tear', m: 'frown' },
-  dizzy: { e: 'x', m: 'wavy', fx: 'orbit' }, nom1: { e: 'arc', m: 'O', fx: 'coins1' }, nom2: { e: 'arc', m: 'dot' },
-  think: { e: 'n', m: 'dot', fx: 'dots' }, sing: { e: 'arc', m: 'O', fx: 'notes' }, dream: { e: 'u', m: 'smile', fx: 'zz' },
-  burp: { e: 'gt', m: 'O', fx: 'burp' }
+happy: { e: 'n', m: 'smile' }, calm: { e: 'n', m: 'dot' }, nervous: { e: 'n', m: 'wavy', fx: 'sweat' }, sleep: { e: 'u', m: 'dot', fx: 'zz' },
+full1: { e: 'n', m: 'dot' }, full2: { e: 'n', m: 'smile' }, full3: { e: 'gt', m: 'smile', fx: 'burp' },
+grin: { e: 'arc', m: 'D' }, love: { e: 'heart', m: 'smile', fx: 'hearts' }, star: { e: 'star', m: 'D', fx: 'spark' },
+money: { e: 'coin', m: 'D', fx: 'coins' }, wow: { e: 'tall', m: 'O', fx: 'bang' }, wink: { e: 'wink', m: 'smile' },
+cool: { e: 'cool', m: 'smile', fx: 'spark' }, yawn: { e: 'u', m: 'bigO' }, sad: { e: 'tear', m: 'frown' },
+dizzy: { e: 'x', m: 'wavy', fx: 'orbit' }, nom1: { e: 'arc', m: 'O', fx: 'coins1' }, nom2: { e: 'arc', m: 'dot' },
+think: { e: 'n', m: 'dot', fx: 'dots' }, sing: { e: 'arc', m: 'O', fx: 'notes' }, dream: { e: 'u', m: 'smile', fx: 'zz' },
+burp: { e: 'gt', m: 'O', fx: 'burp' }
 };
 const MOUTH = {
-  smile: g => pr(g.cx - 2, g.my, 1, 1) + pr(g.cx + 1, g.my, 1, 1) + pr(g.cx - 1, g.my + 1, 2, 1),
-  dot: g => pr(g.cx - 1, g.my + 1, 2, 1),
-  frown: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx + 1, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 2, 1),
-  wavy: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 1, 1) + pr(g.cx, g.my + 1, 1, 1) + pr(g.cx + 1, g.my, 1, 1),
-  D: g => pr(g.cx - 2, g.my, 4, 1) + pr(g.cx - 1, g.my + 1, 2, 1, PP),
-  O: g => pr(g.cx - 1, g.my, 2, 2),
-  bigO: g => pr(g.cx - 1, g.my, 2, 3) + pr(g.cx - 1, g.my + 2, 2, 1, PP)
+smile: g => pr(g.cx - 2, g.my, 1, 1) + pr(g.cx + 1, g.my, 1, 1) + pr(g.cx - 1, g.my + 1, 2, 1),
+dot: g => pr(g.cx - 1, g.my + 1, 2, 1),
+frown: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx + 1, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 2, 1),
+wavy: g => pr(g.cx - 2, g.my + 1, 1, 1) + pr(g.cx - 1, g.my, 1, 1) + pr(g.cx, g.my + 1, 1, 1) + pr(g.cx + 1, g.my, 1, 1),
+D: g => pr(g.cx - 2, g.my, 4, 1) + pr(g.cx - 1, g.my + 1, 2, 1, PP),
+O: g => pr(g.cx - 1, g.my, 2, 2),
+bigO: g => pr(g.cx - 1, g.my, 2, 3) + pr(g.cx - 1, g.my + 2, 2, 1, PP)
 };
 function eyeSvg(t, x, side, g) {
-  const ey = g.ey, hx = side ? x - 1 : x;
-  switch (t) {
-    case 'n': return pr(x, ey, 2, 3) + pr(x + 1, ey, 1, 1, PW);
-    case 'tall': return pr(x, ey - 1, 2, 4) + pr(x + 1, ey - 1, 1, 1, PW);
-    case 'arc': return pr(x - 1, ey + 2, 1, 1) + pr(x, ey + 1, 2, 1) + pr(x + 2, ey + 2, 1, 1);
-    case 'u': return pr(x - 1, ey + 1, 1, 1) + pr(x, ey + 2, 2, 1) + pr(x + 2, ey + 1, 1, 1);
-    case 'gt': return side ? pr(x + 1, ey, 1, 1) + pr(x, ey + 1, 1, 1) + pr(x + 1, ey + 2, 1, 1) : pr(x, ey, 1, 1) + pr(x + 1, ey + 1, 1, 1) + pr(x, ey + 2, 1, 1);
-    case 'heart': return pr(hx, ey, 1, 1, PR) + pr(hx + 2, ey, 1, 1, PR) + pr(hx, ey + 1, 3, 1, PR) + pr(hx + 1, ey + 2, 1, 1, PR);
-    case 'star': return pr(hx + 1, ey, 1, 3, PY) + pr(hx, ey + 1, 3, 1, PY);
-    case 'coin': return pr(hx, ey, 3, 3, PY) + pr(hx + 1, ey + 1, 1, 1, '#B7791F');
-    case 'x': return pr(hx, ey, 1, 1) + pr(hx + 2, ey, 1, 1) + pr(hx + 1, ey + 1, 1, 1) + pr(hx, ey + 2, 1, 1) + pr(hx + 2, ey + 2, 1, 1);
-    case 'tear': return pr(x, ey, 2, 3) + pr(x + 1, ey, 1, 1, PW) + pr(side ? x + 1 : x, ey + 3, 1, 1, PB);
-  }
-  return '';
+const ey = g.ey, hx = side ? x - 1 : x;
+switch (t) {
+case 'n': return pr(x, ey, 2, 3) + pr(x + 1, ey, 1, 1, PW);
+case 'tall': return pr(x, ey - 1, 2, 4) + pr(x + 1, ey - 1, 1, 1, PW);
+case 'arc': return pr(x - 1, ey + 2, 1, 1) + pr(x, ey + 1, 2, 1) + pr(x + 2, ey + 2, 1, 1);
+case 'u': return pr(x - 1, ey + 1, 1, 1) + pr(x, ey + 2, 2, 1) + pr(x + 2, ey + 1, 1, 1);
+case 'gt': return side ? pr(x + 1, ey, 1, 1) + pr(x, ey + 1, 1, 1) + pr(x + 1, ey + 2, 1, 1) : pr(x, ey, 1, 1) + pr(x + 1, ey + 1, 1, 1) + pr(x, ey + 2, 1, 1);
+case 'heart': return pr(hx, ey, 1, 1, PR) + pr(hx + 2, ey, 1, 1, PR) + pr(hx, ey + 1, 3, 1, PR) + pr(hx + 1, ey + 2, 1, 1, PR);
+case 'star': return pr(hx + 1, ey, 1, 3, PY) + pr(hx, ey + 1, 3, 1, PY);
+case 'coin': return pr(hx, ey, 3, 3, PY) + pr(hx + 1, ey + 1, 1, 1, '#B7791F');
+case 'x': return pr(hx, ey, 1, 1) + pr(hx + 2, ey, 1, 1) + pr(hx + 1, ey + 1, 1, 1) + pr(hx, ey + 2, 1, 1) + pr(hx + 2, ey + 2, 1, 1);
+case 'tear': return pr(x, ey, 2, 3) + pr(x + 1, ey, 1, 1, PW) + pr(side ? x + 1 : x, ey + 3, 1, 1, PB);
+}
+return '';
 }
 function faceSvg(face, g) {
-  const F = FACE[face] || FACE.calm, { lx, rx, ey, my } = g;
-  let eyes;
-  if (F.e === 'cool') eyes = pr(lx - 1, ey, 4, 2) + pr(rx - 1, ey, 4, 2) + pr(lx + 3, ey, rx - lx - 4, 1) + pr(lx, ey, 1, 1, PW, .7) + pr(rx, ey, 1, 1, PW, .7);
-  else if (F.e === 'wink') eyes = eyeSvg('n', lx, 0, g) + eyeSvg('arc', rx, 1, g);
-  else eyes = eyeSvg(F.e, lx, 0, g) + eyeSvg(F.e, rx, 1, g);
-  const bl = (F.e === 'n' || F.e === 'tall' || F.e === 'tear') ? ' bl' : '';
-  return pr(lx - 1, my, 2, 1, PP, .7) + pr(rx + 1, my, 2, 1, PP, .7)
-    + `<g class="gz"><g class="ey${bl}">${eyes}</g></g>` + MOUTH[F.m](g);
+const F = FACE[face] || FACE.calm, { lx, rx, ey, my } = g;
+let eyes;
+if (F.e === 'cool') eyes = pr(lx - 1, ey, 4, 2) + pr(rx - 1, ey, 4, 2) + pr(lx + 3, ey, rx - lx - 4, 1) + pr(lx, ey, 1, 1, PW, .7) + pr(rx, ey, 1, 1, PW, .7);
+else if (F.e === 'wink') eyes = eyeSvg('n', lx, 0, g) + eyeSvg('arc', rx, 1, g);
+else eyes = eyeSvg(F.e, lx, 0, g) + eyeSvg(F.e, rx, 1, g);
+const bl = (F.e === 'n' || F.e === 'tall' || F.e === 'tear') ? ' bl' : '';
+return pr(lx - 1, my, 2, 1, PP, .7) + pr(rx + 1, my, 2, 1, PP, .7)
++ ⁠<g class="gz"><g class="ey${bl}">${eyes}</g></g>⁠ + MOUTHF.m;
 }
 function fxSvg(face, g) {
-  const t = (FACE[face] || {}).fx; if (!t) return '';
-  const { cx, x0, bw, top, my } = g, ex = x0 + bw + 1;
-  const gr = (c, st, inner) => `<g class="${c}"${st ? ` style="${st}"` : ''}>${inner}</g>`;
-  const heart = (x, y) => pr(x, y, 1, 1, PR) + pr(x + 2, y, 1, 1, PR) + pr(x, y + 1, 3, 1, PR) + pr(x + 1, y + 2, 1, 1, PR);
-  const plus = (x, y, c) => pr(x + 1, y, 1, 3, c) + pr(x, y + 1, 3, 1, c);
-  const zed = (x, y) => pr(x, y, 3, 1, PW) + pr(x + 1, y + 1, 1, 1, PW) + pr(x, y + 2, 3, 1, PW);
-  const note = (x, y, c) => pr(x + 1, y, 1, 3, c) + pr(x + 2, y, 1, 1, c) + pr(x, y + 2, 2, 2, c);
-  switch (t) {
-    case 'zz': return gr('fxz', '', zed(ex, 3)) + gr('fxz', 'animation-delay:1.2s', zed(ex + 2, 0)) + gr('bub2', '', pr(cx + 1, my, 2, 2, '#CFEFFF'));
-    case 'sweat': return gr('drip', '', pr(x0 + bw - 3, top - 2, 1, 2, PB));
-    case 'burp': return gr('burp', '', pr(ex, my, 1, 1, PW) + pr(ex + 1, my - 2, 2, 2, PW));
-    case 'hearts': return [[cx - 6, 1, 0], [cx + 3, 0, .35], [cx - 1, 0, .7]].map(([x, y, d]) => gr('rise', `animation-delay:${d}s`, heart(x, y))).join('');
-    case 'spark': return gr('tw', '', plus(x0 - 2, 1, PY)) + gr('tw', 'animation-delay:.5s', plus(ex - 1, 0, PY)) + gr('tw', 'animation-delay:.25s', plus(cx - 1, 0, PW));
-    case 'coins': return [cx - 6, cx - 1, cx + 4].map((x, i) => gr('coin', `animation-delay:${i * .3}s`, pr(x, 0, 2, 2, PY))).join('');
-    case 'coins1': return gr('coin', 'animation-duration:.8s', pr(cx - 1, 0, 2, 2, PY));
-    case 'bang': return pr(ex, 2, 1, 3, PR) + pr(ex, 6, 1, 1, PR);
-    case 'orbit': return gr('orb1', '', plus(cx - 1, 0, PY)) + gr('orb2', '', plus(cx - 1, 0, PW));
-    case 'dots': return [0, 1, 2].map(i => gr('dd', `animation-delay:${i * .3}s`, pr(ex + i * 2, 4 - i * 2, 1, 1, PW))).join('');
-    case 'notes': return gr('rise', '', note(x0 - 3, 1, PW)) + gr('rise', 'animation-delay:.8s', note(ex, 0, PY));
-  }
-  return '';
+const t = (FACE[face] || {}).fx; if (!t) return '';
+const { cx, x0, bw, top, my } = g, ex = x0 + bw + 1;
+const gr = (c, st, inner) => ⁠<g class="${c}"${st ? ⁠ style="${st}"⁠ : ''}>${inner}</g>⁠;
+const heart = (x, y) => pr(x, y, 1, 1, PR) + pr(x + 2, y, 1, 1, PR) + pr(x, y + 1, 3, 1, PR) + pr(x + 1, y + 2, 1, 1, PR);
+const plus = (x, y, c) => pr(x + 1, y, 1, 3, c) + pr(x, y + 1, 3, 1, c);
+const zed = (x, y) => pr(x, y, 3, 1, PW) + pr(x + 1, y + 1, 1, 1, PW) + pr(x, y + 2, 3, 1, PW);
+const note = (x, y, c) => pr(x + 1, y, 1, 3, c) + pr(x + 2, y, 1, 1, c) + pr(x, y + 2, 2, 2, c);
+switch (t) {
+case 'zz': return gr('fxz', '', zed(ex, 3)) + gr('fxz', 'animation-delay:1.2s', zed(ex + 2, 0)) + gr('bub2', '', pr(cx + 1, my, 2, 2, '#CFEFFF'));
+case 'sweat': return gr('drip', '', pr(x0 + bw - 3, top - 2, 1, 2, PB));
+case 'burp': return gr('burp', '', pr(ex, my, 1, 1, PW) + pr(ex + 1, my - 2, 2, 2, PW));
+case 'hearts': return [[cx - 6, 1, 0], [cx + 3, 0, .35], [cx - 1, 0, .7]].map(([x, y, d]) => gr('rise', ⁠animation-delay:${d}s⁠, heart(x, y))).join('');
+case 'spark': return gr('tw', '', plus(x0 - 2, 1, PY)) + gr('tw', 'animation-delay:.5s', plus(ex - 1, 0, PY)) + gr('tw', 'animation-delay:.25s', plus(cx - 1, 0, PW));
+case 'coins': return [cx - 6, cx - 1, cx + 4].map((x, i) => gr('coin', ⁠animation-delay:${i * .3}s⁠, pr(x, 0, 2, 2, PY))).join('');
+case 'coins1': return gr('coin', 'animation-duration:.8s', pr(cx - 1, 0, 2, 2, PY));
+case 'bang': return pr(ex, 2, 1, 3, PR) + pr(ex, 6, 1, 1, PR);
+case 'orbit': return gr('orb1', '', plus(cx - 1, 0, PY)) + gr('orb2', '', plus(cx - 1, 0, PW));
+case 'dots': return [0, 1, 2].map(i => gr('dd', ⁠animation-delay:${i * .3}s⁠, pr(ex + i * 2, 4 - i * 2, 1, 1, PW))).join('');
+case 'notes': return gr('rise', '', note(x0 - 3, 1, PW)) + gr('rise', 'animation-delay:.8s', note(ex, 0, PY));
+}
+return '';
 }
 function petSvg(mood, face) {
-  const g = pgeo(mood), f = face || mood, { x0, bw, bh, top, bottom, legs, cx, fat } = g;
-  let s = pr(x0 + 1, 15, bw - 2, 1, '#000', .22);
-  const lp = fat < 2 ? [cx - 7, cx - 4, cx + 2, cx + 5] : [cx - 6, cx - 3, cx + 1, cx + 4];
-  s += `<g class="lg1">${pr(lp[0], bottom, 2, legs, PC)}${pr(lp[2], bottom, 2, legs, PC)}</g><g class="lg2">${pr(lp[1], bottom, 2, legs, PC)}${pr(lp[3], bottom, 2, legs, PC)}</g>`;
-  const ay = top + Math.floor(bh / 2), ah = fat >= 2 ? 2 : 3;
-  s += `<g class="aL">${pr(x0 - 2, ay, 2, ah, PC)}</g><g class="aR">${pr(x0 + bw, ay, 2, ah, PC)}</g>`;
-  for (let i = 0; i < bh; i++) {
-    const m = Math.min(i, bh - 1 - i);
-    const ins = fat === 0 ? (i === 0 ? 1 : 0) : fat === 1 ? (m === 0 ? 1 : 0) : fat === 2 ? (m === 0 ? 2 : m === 1 ? 1 : 0) : (m === 0 ? 3 : m === 1 ? 2 : m === 2 ? 1 : 0);
-    s += pr(x0 + ins, top + i, bw - 2 * ins, 1, i === bh - 1 ? PD : PC);
-  }
-  s += `<g class="face">${faceSvg(f, g)}</g><g class="fx">${fxSvg(f, g)}</g>`;
-  return `<svg viewBox="0 0 28 16" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
+const g = pgeo(mood), f = face || mood, { x0, bw, bh, top, bottom, legs, cx, fat } = g;
+let s = pr(x0 + 1, 15, bw - 2, 1, '#000', .22);
+const lp = fat < 2 ? [cx - 7, cx - 4, cx + 2, cx + 5] : [cx - 6, cx - 3, cx + 1, cx + 4];
+s += ⁠<g class="lg1">${pr(lp[0], bottom, 2, legs, PC)}${pr(lp[2], bottom, 2, legs, PC)}</g><g class="lg2">${pr(lp[1], bottom, 2, legs, PC)}${pr(lp[3], bottom, 2, legs, PC)}</g>⁠;
+const ay = top + Math.floor(bh / 2), ah = fat >= 2 ? 2 : 3;
+s += ⁠<g class="aL">${pr(x0 - 2, ay, 2, ah, PC)}</g><g class="aR">${pr(x0 + bw, ay, 2, ah, PC)}</g>⁠;
+for (let i = 0; i < bh; i++) {
+const m = Math.min(i, bh - 1 - i);
+const ins = fat === 0 ? (i === 0 ? 1 : 0) : fat === 1 ? (m === 0 ? 1 : 0) : fat === 2 ? (m === 0 ? 2 : m === 1 ? 1 : 0) : (m === 0 ? 3 : m === 1 ? 2 : m === 2 ? 1 : 0);
+s += pr(x0 + ins, top + i, bw - 2 * ins, 1, i === bh - 1 ? PD : PC);
 }
-
+s += ⁠<g class="face">${faceSvg(f, g)}</g><g class="fx">${fxSvg(f, g)}</g>⁠;
+return ⁠<svg viewBox="0 0 28 16" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>⁠;
+}
 let petMood = '', faceT, actT, lookT, busyUntil = 0, seqT = [];
 function refreshPet() {
-  const st = petState(), el = $('pet');
-  if (st.mood !== petMood) { petMood = st.mood; el.className = 'pet ' + st.mood; el.innerHTML = petSvg(st.mood); }
-  el.setAttribute('aria-label', petName() + '（點一下和他說話）');
-  return st;
+const st = petState(), el = $('pet');
+if (st.mood !== petMood) { petMood = st.mood; el.className = 'pet ' + st.mood; el.innerHTML = petSvg(st.mood); }
+el.setAttribute('aria-label', petName() + '（點一下和他說話）');
+return st;
 }
 function setFace(face, ms, inSeq) {
-  if (!inSeq) { seqT.forEach(clearTimeout); seqT = []; }
-  clearTimeout(faceT);
-  const el = $('pet'), fe = el.querySelector('.face'); if (!fe) return;
-  const g = pgeo(petMood || 'calm');
-  fe.innerHTML = faceSvg(face, g); el.querySelector('.fx').innerHTML = fxSvg(face, g);
-  if (ms) faceT = setTimeout(() => setFace(petMood), ms);
+if (!inSeq) { seqT.forEach(clearTimeout); seqT = []; }
+clearTimeout(faceT);
+const el = $('pet'), fe = el.querySelector('.face'); if (!fe) return;
+const g = pgeo(petMood || 'calm');
+fe.innerHTML = faceSvg(face, g); el.querySelector('.fx').innerHTML = fxSvg(face, g);
+if (ms) faceT = setTimeout(() => setFace(petMood), ms);
 }
 function faceSeq(list) {
-  seqT.forEach(clearTimeout); seqT = []; let t = 0;
-  list.forEach(([f, d]) => { seqT.push(setTimeout(() => setFace(f, 0, true), t)); t += d; });
-  seqT.push(setTimeout(() => setFace(petMood, 0, true), t));
-  busyUntil = Math.max(busyUntil, Date.now() + t);
+seqT.forEach(clearTimeout); seqT = []; let t = 0;
+list.forEach(([f, d]) => { seqT.push(setTimeout(() => setFace(f, 0, true), t)); t += d; });
+seqT.push(setTimeout(() => setFace(petMood, 0, true), t));
+busyUntil = Math.max(busyUntil, Date.now() + t);
 }
 const chew = () => faceSeq([['nom1', 420], ['nom2', 300], ['nom1', 420], ['nom2', 300], ['grin', 700]]);
 function look(dir, ms) {
-  const el = $('pet'); ['l', 'r', 'u', 'd'].forEach(k => el.classList.remove('look-' + k));
-  clearTimeout(lookT);
-  if (dir) { el.classList.add('look-' + dir); lookT = setTimeout(() => look(null), ms || 1300); }
+const el = $('pet'); ['l', 'r', 'u', 'd'].forEach(k => el.classList.remove('look-' + k));
+clearTimeout(lookT);
+if (dir) { el.classList.add('look-' + dir); lookT = setTimeout(() => look(null), ms || 1300); }
 }
 const ACTS = {
-  jump: { ms: 650 }, jiggle: { ms: 650 }, wave: { ms: 1900, face: 'grin' }, cheer: { ms: 1900, face: 'star' },
-  dance: { ms: 2600, face: 'grin' }, stretch: { ms: 1800, face: 'yawn' }, yawn: { ms: 1900, face: 'yawn' }, sing: { ms: 2700, face: 'sing' },
-  turn: { ms: 1000 }, stroll: { ms: 2600 }, shiver: { ms: 1200 }, sigh: { ms: 1800, face: 'sad' }, snore: { ms: 1600 },
-  waddle: { ms: 1800 }, dizzy: { ms: 1800, face: 'dizzy' }, think: { ms: 2300, face: 'think' }
+jump: { ms: 650 }, jiggle: { ms: 650 }, wave: { ms: 1900, face: 'grin' }, cheer: { ms: 1900, face: 'star' },
+dance: { ms: 2600, face: 'grin' }, stretch: { ms: 1800, face: 'yawn' }, yawn: { ms: 1900, face: 'yawn' }, sing: { ms: 2700, face: 'sing' },
+turn: { ms: 1000 }, stroll: { ms: 2600 }, shiver: { ms: 1200 }, sigh: { ms: 1800, face: 'sad' }, snore: { ms: 1600 },
+waddle: { ms: 1800 }, dizzy: { ms: 1800, face: 'dizzy' }, think: { ms: 2300, face: 'think' }
 };
 function act(name, faceOverride) {
-  const a = ACTS[name]; if (!a) return;
-  const el = $('pet'); Object.keys(ACTS).forEach(k => el.classList.remove('a-' + k)); void el.offsetWidth;
-  el.classList.add('a-' + name);
-  const f = faceOverride || a.face; if (f) setFace(f, a.ms);
-  busyUntil = Math.max(busyUntil, Date.now() + a.ms);
-  clearTimeout(actT); actT = setTimeout(() => el.classList.remove('a-' + name), a.ms + 50);
+const a = ACTS[name]; if (!a) return;
+const el = $('pet'); Object.keys(ACTS).forEach(k => el.classList.remove('a-' + k)); void el.offsetWidth;
+el.classList.add('a-' + name);
+const f = faceOverride || a.face; if (f) setFace(f, a.ms);
+busyUntil = Math.max(busyUntil, Date.now() + a.ms);
+clearTimeout(actT); actT = setTimeout(() => el.classList.remove('a-' + name), a.ms + 50);
 }
-
 let bubbleTimer;
 function say(text, ms = 7000) {
-  const b = $('bubble');
-  b.innerHTML = `<b class="bn">${esc(petName())}</b>${esc(text.replace(/\{name\}/g, petName()))}`;
-  b.hidden = false; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
-  clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => { b.hidden = true; }, ms);
+const b = $('bubble');
+b.innerHTML = ⁠<b class="bn">${esc(petName())}</b>${esc(text.replace(/\{name\}/g, petName()))}⁠;
+b.hidden = false; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => { b.hidden = true; }, ms);
 }
-
 /* 待機動作 */
 const IDLE = {
-  happy: [['wave', 3], ['dance', 2], ['sing', 2], ['look', 3], ['hop', 3], ['wink', 2], ['stroll', 2], ['turn', 1], ['think', 1], ['love', 1]],
-  calm: [['look', 4], ['think', 2], ['yawn', 2], ['stretch', 2], ['hop', 1], ['wave', 1], ['stroll', 1], ['wink', 1], ['sing', 1]],
-  nervous: [['shiver', 3], ['look', 3], ['sigh', 2], ['think', 1]],
-  sleep: [['dream', 3], ['snore', 3]],
-  full1: [['belly', 3], ['look', 2], ['yawn', 1], ['hop', 1], ['burp', 1]],
-  full2: [['belly', 3], ['waddle', 2], ['look', 2], ['burp', 2], ['yawn', 1]],
-  full3: [['belly', 3], ['burp', 3], ['waddle', 2], ['sigh', 2], ['dizzy', 1]]
+happy: [['wave', 3], ['dance', 2], ['sing', 2], ['look', 3], ['hop', 3], ['wink', 2], ['stroll', 2], ['turn', 1], ['think', 1], ['love', 1]],
+calm: [['look', 4], ['think', 2], ['yawn', 2], ['stretch', 2], ['hop', 1], ['wave', 1], ['stroll', 1], ['wink', 1], ['sing', 1]],
+nervous: [['shiver', 3], ['look', 3], ['sigh', 2], ['think', 1]],
+sleep: [['dream', 3], ['snore', 3]],
+full1: [['belly', 3], ['look', 2], ['yawn', 1], ['hop', 1], ['burp', 1]],
+full2: [['belly', 3], ['waddle', 2], ['look', 2], ['burp', 2], ['yawn', 1]],
+full3: [['belly', 3], ['burp', 3], ['waddle', 2], ['sigh', 2], ['dizzy', 1]]
 };
 const IDLE_ACT = {
-  look() { const d = pick(['l', 'r']); look(d, 900); setTimeout(() => look(d === 'l' ? 'r' : 'l', 900), 1000); },
-  hop() { act('jump'); },
-  wink() { setFace('wink', 900); },
-  love() { act('jiggle'); setFace('love', 2200); },
-  dream() { setFace('dream', 2800); },
-  snore() { setFace('sleep'); act('snore'); },
-  belly() { act('jiggle'); setFace('grin', 1600); },
-  burp() { act('jiggle'); setFace('burp', 1500); },
-  think() { look('u', 2200); act('think'); }
+look() { const d = pick(['l', 'r']); look(d, 900); setTimeout(() => look(d === 'l' ? 'r' : 'l', 900), 1000); },
+hop() { act('jump'); },
+wink() { setFace('wink', 900); },
+love() { act('jiggle'); setFace('love', 2200); },
+dream() { setFace('dream', 2800); },
+snore() { setFace('sleep'); act('snore'); },
+belly() { act('jiggle'); setFace('grin', 1600); },
+burp() { act('jiggle'); setFace('burp', 1500); },
+think() { look('u', 2200); act('think'); }
 };
 const IDLE_SAY = {
-  wave: ['嗨～看到你我就安心了。', '我在這裡呢，隨時都在。'],
-  sing: ['哼哼～只要你在身邊，心情就會變得好好。'],
-  think: ['在想你今天會不會累呢……', '今天有沒有好好吃點甜的呀？'],
-  yawn: ['呼啊～有點睏了，但還想再多看你一眼。'],
-  stretch: ['伸個懶腰～隨時準備好為你加油！'],
-  belly: ['肚子好像稍微鼓了一點點……你會抱抱我嗎？'],
-  burp: ['嗝……失禮了，但有你在就忍不住放鬆了。'],
-  look: ['剛剛是你在看我嗎？嘿嘿。'],
-  love: ['只是突然覺得……遇見你真的很幸運。'],
-  shiver: ['別擔心預算，有我在呢，我們會一起好好的。'],
-  sigh: ['深呼吸一下……累了就靠在我肩上吧。'],
-  stroll: ['想和你手牽手一起散步～'],
-  wink: ['眨眨眼～今天也很喜歡你。'],
-  dream: ['……呼……夢裡全都是你……'],
-  waddle: ['搖搖晃晃走向你的懷裡～']
+wave: ['嗨～看到你我就安心了。', '我在這裡呢，隨時都在。'],
+sing: ['哼哼～只要你在身邊，心情就會變得好好。'],
+think: ['在想你今天會不會累呢……', '今天有沒有好好吃點甜的呀？'],
+yawn: ['呼啊～有點睏了，但還想再多看你一眼。'],
+stretch: ['伸個懶腰～隨時準備好為你加油！'],
+belly: ['肚子好像稍微鼓了一點點……你會抱抱我嗎？'],
+burp: ['嗝……失禮了，但有你在就忍不住放鬆了。'],
+look: ['剛剛是你在看我嗎？嘿嘿。'],
+love: ['只是突然覺得……遇見你真的很幸運。'],
+shiver: ['別擔心預算，有我在呢，我們會一起好好的。'],
+sigh: ['深呼吸一下……累了就靠在我肩上吧。'],
+stroll: ['想和你手牽手一起散步～'],
+wink: ['眨眨眼～今天也很喜歡你。'],
+dream: ['……呼……夢裡全都是你……'],
+waddle: ['搖搖晃晃走向你的懷裡～']
 };
 function wpick(list) { let r = Math.random() * list.reduce((s, x) => s + x[1], 0); for (const x of list) { if ((r -= x[1]) < 0) return x[0]; } return list[0][0]; }
 function runIdle(n) {
-  (IDLE_ACT[n] || (() => act(n)))();
-  const s = IDLE_SAY[n];
-  if (s && $('bubble').hidden && Math.random() < .45) say(pickSafe(s), 3600);
+(IDLE_ACT[n] || (() => act(n)))();
+const s = IDLE_SAY[n];
+if (s && $('bubble').hidden && Math.random() < .45) say(pickSafe(s), 3600);
 }
 function idleTick() {
-  if (document.hidden || $('tab-add').hidden || modalOpen || Date.now() < busyUntil) return;
-  const h = new Date().getHours();
-  if ((h >= 23 || h < 5) && petMood !== 'sleep' && Math.random() < .35) { runIdle('yawn'); return; }
-  runIdle(wpick(IDLE[petMood] || IDLE.calm));
+if (document.hidden || $('tab-add').hidden || modalOpen || Date.now() < busyUntil) return;
+const h = new Date().getHours();
+if ((h >= 23 || h < 5) && petMood !== 'sleep' && Math.random() < .35) { runIdle('yawn'); return; }
+runIdle(wpick(IDLE[petMood] || IDLE.calm));
 }
 function scheduleIdle() { setTimeout(() => { idleTick(); scheduleIdle(); }, 3200 + Math.random() * 4800); }
-
 function moodLine(st) {
-  if (!entries.length && !settings.noSpend.length) return pickSafe(L.meet);
-  const h = new Date().getHours();
-  if (Math.random() < .35) {
-    return pickSafe(L[h < 5 ? 'night' : h < 11 ? 'morning' : h < 14 ? 'noon' : h < 18 ? 'afternoon' : h < 23 ? 'evening' : 'night']);
-  }
-  if (!st.b && Math.random() < .3) return pickSafe(L.noBudget);
-  return pickSafe(L[st.mood] || L.calm);
+if (!entries.length && !settings.noSpend.length) return pickSafe(L.meet);
+const h = new Date().getHours();
+if (Math.random() < .35) {
+return pickSafe(L[h < 5 ? 'night' : h < 11 ? 'morning' : h < 14 ? 'noon' : h < 18 ? 'afternoon' : h < 23 ? 'evening' : 'night']);
 }
-
+if (!st.b && Math.random() < .3) return pickSafe(L.noBudget);
+return pickSafe(L[st.mood] || L.calm);
+}
 function petReact(e, wasEdit) {
-  const st = refreshPet(), fat = st.mood.indexOf('full') === 0;
-  if (wasEdit) { act('jump'); setFace('wink', 1400); say(pickSafe(L.edit)); return; }
-  const first = entries.filter(x => x.date === e.date).length === 1;
-  const si = streakInfo(); let line;
-
-  if (e.type === 'income') {
-    act('cheer', 'money');
-    line = pickSafe(L.income);
-  } else if (e.cat === '餐飲') {
-    act('jump'); chew();
-    line = pickSafe(L.cat_food);
-  } else if (e.cat === '交通') {
-    act('wave');
-    line = pickSafe(L.cat_trans);
-  } else if (e.cat === '服飾裝扮') {
-    act('stretch', 'love');
-    line = pickSafe(L.cat_cloth);
-  } else if (e.cat === '醫療') {
-    act('sigh', 'sad');
-    line = pickSafe(L.cat_med);
-  } else if (fat) {
-    act('jiggle'); chew();
-    line = pickSafe(L[st.mood] || L.saved);
-  } else if (first && e.date === ymd(new Date()) && STREAKS.includes(si.cur)) {
-    act('dance');
-    line = streakLine(si.cur);
-  } else if (e.hkd >= 800) {
-    act('jump'); setFace('wow', 1500);
-    line = pickSafe(L.big);
-  } else if (st.mood === 'nervous') {
-    chew();
-    line = pickSafe(L.nervous);
-  } else {
-    act('jump'); chew();
-    line = pickSafe(L.saved);
-  }
-  say(line);
+const st = refreshPet(), fat = st.mood.indexOf('full') === 0;
+if (wasEdit) { act('jump'); setFace('wink', 1400); say(pickSafe(L.edit)); return; }
+const first = entries.filter(x => x.date === e.date).length === 1;
+const si = streakInfo(); let line;
+if (e.type === 'income') {
+act('cheer', 'money');
+line = pickSafe(L.income);
+} else if (e.cat === '餐飲') {
+act('jump'); chew();
+line = pickSafe(L.cat_food);
+} else if (e.cat === '交通') {
+act('wave');
+line = pickSafe(L.cat_trans);
+} else if (e.cat === '服飾裝扮') {
+act('stretch', 'love');
+line = pickSafe(L.cat_cloth);
+} else if (e.cat === '醫療') {
+act('sigh', 'sad');
+line = pickSafe(L.cat_med);
+} else if (fat) {
+act('jiggle'); chew();
+line = pickSafe(L[st.mood] || L.saved);
+} else if (first && e.date === ymd(new Date()) && STREAKS.includes(si.cur)) {
+act('dance');
+line = streakLine(si.cur);
+} else if (e.hkd >= 800) {
+act('jump'); setFace('wow', 1500);
+line = pickSafe(L.big);
+} else if (st.mood === 'nervous') {
+chew();
+line = pickSafe(L.nervous);
+} else {
+act('jump'); chew();
+line = pickSafe(L.saved);
 }
-
+say(line);
+}
 function toggleNoSpend() {
-  const t = ymd(new Date()), i = settings.noSpend.indexOf(t);
-  if (i >= 0) {
-    settings.noSpend.splice(i, 1);
-    saveSettings();
-    updateSub();
-    toast('已取消標記');
-    return;
-  }
-  settings.noSpend.push(t);
-  saveSettings();
-  updateSub();
-  act('stretch', 'cool');
-  toast('已標記：今天沒有花錢');
-  say(pickSafe(L.nospend));
-  checkAch();
+const t = ymd(new Date()), i = settings.noSpend.indexOf(t);
+if (i >= 0) {
+settings.noSpend.splice(i, 1);
+saveSettings();
+updateSub();
+toast('已取消標記');
+return;
 }
-
+settings.noSpend.push(t);
+saveSettings();
+updateSub();
+act('stretch', 'cool');
+toast('已標記：今天沒有花錢');
+say(pickSafe(L.nospend));
+checkAch();
+}
 /* ---------- 成就系統 ---------- */
 const AC = { cnt: '#D97757', str: '#E0A100', ns: '#15803D', bud: '#2563EB', cny: '#BE123C', cat: '#7C3AED', tm: '#0F766E', day: '#BE185D', misc: '#64748B' };
 const ACH = [];
 const A = (id, cat, icon, name, desc, line, t) => ACH.push({ id, cat, icon, name, desc, line, t });
-
 A('n1', 'cnt', '🌱', '第一步', '記下第一筆帳目', '第一筆記下來了呢。這是一個很棒的開始，我會一直陪著你。', c => c.n >= 1);
 A('n10', 'cnt', '✏️', '漸入佳境', '累積記下 10 筆', '已經十筆了呢，看著你認真的模樣，我真的很心動。', c => c.n >= 10);
 A('n50', 'cnt', '📒', '筆記達人', '累積記下 50 筆', '五十筆了。每一筆我都替你好好收藏著。', c => c.n >= 50);
@@ -1480,7 +1408,6 @@ A('d100', 'cnt', '🎯', '百日記帳', '在 100 個不同的日子留下記錄
 A('dn5', 'cnt', '🤹', '一天五筆', '一天之內記下 5 筆', '今天好忙碌呢，辛苦你了，等等一定要好好休息哦。', c => c.maxDayN >= 5);
 A('dn10', 'cnt', '🧾', '忙碌的一天', '一天之內記下 10 筆', '十筆！今天跑了好多地方吧？快過來讓我給你揉揉肩。', c => c.maxDayN >= 10);
 A('note20', 'cnt', '✍️', '寫下心聲', '有 20 筆帳目寫了備註', '看著你寫下的每條備註，就像在讀你的心情日記呢。', c => c.notes >= 20);
-
 A('s3', 'str', '🔥', '三天熱度', '連續 3 天都有記錄', '三天了呢。習慣身邊有我的存在了吧？不准放手哦。', c => c.streak >= 3);
 A('s7', 'str', '✨', '一週不間斷', '連續 7 天都有記錄', '整整一週都在我身邊……我已經不能沒有你了。', c => c.streak >= 7);
 A('s14', 'str', '🌙', '兩週的約定', '連續 14 天都有記錄', '兩週了呢。能遇見這麼認真生活的你，我好幸福。', c => c.streak >= 14);
@@ -1488,13 +1415,11 @@ A('s30', 'str', '🏅', '整整一個月', '連續 30 天都有記錄', '一整�
 A('s60', 'str', '💎', '六十天的陪伴', '連續 60 天都有記錄', '六十天了。每天看到你，都是我一整天最期待的事。', c => c.streak >= 60);
 A('s100', 'str', '🏆', '百日不輟', '連續 100 天都有記錄', '一百天……謝謝你一直毫無保留地信任我。', c => c.streak >= 100);
 A('s365', 'str', '🌸', '一整年', '連續 365 天都有記錄', '整整一年了呢。我會永遠、永遠陪在你身邊。', c => c.streak >= 365);
-
 A('ns1', 'ns', '🍃', '清爽的一天', '標記過一個沒有花錢的日子', '今天沒有花錢呢。但千萬不可以委屈了自己哦。', c => c.ns >= 1);
 A('ns3r', 'ns', '🧘', '無欲無求', '連續 3 天沒有花錢', '連續三天都沒花錢……真厲害，但飯一定要吃飽哦。', c => c.nsRun >= 3);
 A('ns5', 'ns', '🌿', '存錢小能手', '累積 5 個沒花錢的日子', '五個零支出的日子，你真的很有自己的節奏呢。', c => c.ns >= 5);
 A('ns15', 'ns', '🍀', '節約模範', '累積 15 個沒花錢的日子', '十五天了，這份自律真的讓我好佩服。', c => c.ns >= 15);
 A('ns30', 'ns', '🌳', '守護未來', '累積 30 個沒花錢的日子', '三十個日子，你的溫柔與認真我全都知道。', c => c.ns >= 30);
-
 A('bset', 'bud', '🎯', '有計劃的人', '設定了每月預算', '設好預算了呢。我想和你一起好好守護我們的未來。', c => c.budget > 0);
 A('bok', 'bud', '🛡️', '守住了', '完成一個月，支出沒有超過預算', '這個月你守住了約定呢，我就知道你一定可以的。', c => c.pastOk.length >= 1);
 A('bok2', 'bud', '🏰', '穩穩的幸福', '連續兩個月都在預算之內', '連續兩個月都做到了，這份踏實感真的很迷人。', c => c.pastOk2);
@@ -1502,36 +1427,30 @@ A('bsave', 'bud', '🐿️', '從容儲蓄', '某個月的支出不到預算的�
 A('bhalf', 'bud', '⏳', '半月悠遊', '過了 15 號，本月支出還不到預算一半', '半個月過去了還這麼從容，不愧是你呢。', c => c.half);
 A('fat1', 'bud', '🍙', '吃得飽飽', '讓小克稍微變胖', '肚子稍微圓了點……但只要有你在身邊，我就覺得很幸福。', c => c.overPct > 0);
 A('fat3', 'bud', '🍡', '圓滾滾', '讓小克變成圓球', '圓滾滾的……下個月我們一起慢慢調整，不要自責哦。', c => c.overPct > .5);
-
 A('inc1', 'cnt', '💰', '第一份收入', '記下第一筆收入', '辛勤的成果進帳了呢，辛苦你了，今天買點甜品犒賞一下自己好嗎？', c => c.nInc >= 1);
 A('inc10', 'cnt', '🏦', '細水長流', '累積記下 10 筆收入', '十筆收入了呢。一點一滴的努力，我都好好看在眼裡。', c => c.nInc >= 10);
 A('pos', 'bud', '🌈', '結餘為正', '某個月的收入多過支出', '收入比支出多呢，你真的把自己照顧得很好，我很安心。', c => c.posMonth);
-
 A('cny1', 'cny', '💴', '跨境記錄', '記下第一筆人民幣', '人民幣也記好了呢，不管你去哪裡，我的心都跟著你。', c => c.nCny >= 1);
 A('cny10', 'cny', '🧧', '雙幣管家', '累積記下 10 筆人民幣', '兩種幣別都處理得這麼井井有條，真帥氣。', c => c.nCny >= 10);
 A('cnymix', 'cny', '🔄', '同日雙幣', '同一天記下港幣和人民幣', '一天之內跨越兩種貨幣，今天一定很有故事吧。', c => c.mixDay);
 A('cny1k', 'cny', '🏮', '人民幣千元', '人民幣支出累計達 ¥1,000', '人民幣累積到一千了呢，希望那些回憶都讓你很開心。', c => c.cnyTotal >= 1000);
-
 A('cat3', 'cat', '🎨', '多彩生活', '用過 3 種不同的支出分類', '看著你豐富的日常生活，我也覺得好開心。', c => c.catUsed.size >= 3);
 A('cat5', 'cat', '🧭', '五花八門', '用過 5 種不同的支出分類', '五種分類了呢，你的每一天都有不同的色彩。', c => c.catUsed.size >= 5);
 A('catall', 'cat', '🌈', '全部都試過', '用過所有支出分類', '每一個分類都記錄過了，真想參與你所有的日常。', c => c.catAll);
 A('catfan', 'cat', '🍜', '情有獨鍾', '同一個支出分類累積 20 筆', '你對這個分類真的很鍾情呢，我都悄悄記住了。', c => c.catMax >= 20);
 A('custom', 'cat', '🧩', '專屬分類', '使用了自己新增的分類', '是你自己定義的分類呢，專屬於你的步調，我最喜歡了。', c => c.custom);
 A('quick3', 'cat', '⚡', '默契十足', '擁有 3 個以上的常用備註', '備註越來越齊全了，我們之間的默契也越來越深了呢。', c => c.quickN >= 3);
-
 A('night', 'tm', '🦉', '夜深了', '在凌晨 0 點到 5 點之間記帳', '這麼晚了還沒睡嗎……？會心疼你的，記完快乖乖去睡覺好不好？', c => c.hours.some(h => h < 5));
 A('early', 'tm', '🌅', '早安陽光', '在早上 5 點到 7 點之間記帳', '這麼早呢，今天第一個看見的人是你，真幸福。', c => c.hours.some(h => h >= 5 && h < 7));
 A('lunch', 'tm', '🍱', '午餐時光', '在中午 12 點到 2 點之間記帳', '午餐時間了呢，一定要好好吃飯哦。', c => c.hours.some(h => h >= 12 && h < 14));
 A('late', 'tm', '🕰️', '細心補記', '補記了兩天以前的帳目', '連過去的細節都好好補上了，認真的你特別有魅力。', c => c.late);
 A('wkend', 'tm', '🛋️', '週末時光', '在週末記下帳目', '週末也記得回到我身邊呢，今天想和我多待一會兒嗎？', c => c.wk.has(0) || c.wk.has(6));
 A('wk7', 'tm', '📅', '一週七天', '週一到週日都留下過記錄', '每一天都來找我……謝謝你願意把時間留給我。', c => c.wk.size === 7);
-
 A('eom', 'day', '🌇', '月末回顧', '在月底最後一天記帳', '這個月辛苦了，下個月我也會一直陪著你的。', c => c.eom);
 A('lucky', 'day', '🍀', '吉利數字', '記下了一筆很吉利的金額', '好吉利的數字呢，希望能把所有的好運氣都帶給你。', c => c.lucky);
-A('big1k', 'day', '💸', '重要抉擇', '單筆支出達 HK$1,000', '這筆開銷比較大呢，但只要是你覺得值得的，我都支持你。', c => c.maxExp >= 1000);
-A('big5k', 'day', '🏝️', '重大投資', '單筆支出達 HK$5,000', '這是一筆重大的決定呢，希望它能為你帶來長久的快樂。', c => c.maxExp >= 5000);
+A('big1k', 'day', '💸', '重要抉擇', '單筆支出達 HK￼
+￼5,000', '這是一筆重大的決定呢，希望它能為你帶來長久的快樂。', c => c.maxExp >= 5000);
 A('tiny', 'day', '🪙', '生活微光', '記下一筆不到 HK$1 的支出', '連幾角錢都認真記錄，你的溫柔與細膩讓我好動容。', c => c.tiny);
-
 A('edit', 'misc', '✂️', '重新確認', '修改過一筆帳目', '修正好了呢，任何時候你想調整，我都會依著你。', c => c.f.edited);
 A('export', 'misc', '📤', '好好珍藏', '匯出過一次 CSV', '有好好備份呢，我們之間的回憶誰都搶不走啦。', c => c.f.exported);
 A('import', 'misc', '📥', '重聚', '匯入過一次 CSV', '記錄都搬過來了呢，以後也請多多指教哦。', c => c.f.imported);
@@ -1540,259 +1459,243 @@ A('name', 'misc', '🏷️', '親密稱呼', '替寵物改了名字', '這是你
 A('tap10', 'misc', '👆', '貪戀觸碰', '戳了寵物 10 下', '你這麼喜歡摸摸我嗎？我也好想一直黏著你。', c => (c.f.taps || 0) >= 10);
 A('tap100', 'misc', '🫶', '深情不渝', '戳了寵物 100 下', '一百下了呢……我的心跳聲，你聽見了嗎？', c => (c.f.taps || 0) >= 100);
 A('woke', 'misc', '😴', '第一眼看見你', '叫醒了睡著的寵物', '一睜開眼就是你……這大概是世界上最幸福的感覺了。', c => c.f.woke);
-
 const LEVELS = [[0, '初遇的旅人'], [5, '熟悉的身影'], [12, '心靈伴侶'], [22, '專屬守護'], [34, '密不可分'], [46, '終生承諾'], [58, '無可替代的唯一']];
 function levelOf(n) {
-  if (n >= ACH.length) return { i: LEVELS.length + 1, t: '至深契約' };
-  let k = 0; LEVELS.forEach((l, i) => { if (n >= l[0]) k = i; });
-  return { i: k + 1, t: LEVELS[k][1] };
+if (n >= ACH.length) return { i: LEVELS.length + 1, t: '至深契約' };
+let k = 0; LEVELS.forEach((l, i) => { if (n >= l[0]) k = i; });
+return { i: k + 1, t: LEVELS[k][1] };
 }
-
 function stats() {
-  const exp = entries.filter(e => e.type === 'expense'), inc = entries.filter(e => e.type === 'income');
-  const si = streakInfo(), c = { n: entries.length, nInc: inc.length, streak: si.best, f: settings.flags };
-  const byDate = {};
-  entries.forEach(e => {
-    const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() };
-    o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur);
-  });
-  const vals = Object.values(byDate);
-  c.days = vals.length; c.maxDayN = Math.max(0, ...vals.map(o => o.n)); c.mixDay = vals.some(o => o.cur.size > 1);
-  const ns = settings.noSpend.filter(d => !(byDate[d] && byDate[d].exp)).sort();
-  c.ns = ns.length; c.nsRun = 0;
-  let run = 0, prev = null;
-  ns.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > c.nsRun) c.nsRun = run; prev = d; });
-  c.maxExp = Math.max(0, ...exp.map(e => e.hkd));
-  c.tiny = exp.some(e => e.hkd > 0 && e.hkd < 1);
-  const cnt = {}; exp.forEach(e => cnt[e.cat] = (cnt[e.cat] || 0) + 1);
-  c.catUsed = new Set(Object.keys(cnt)); c.catMax = Math.max(0, ...Object.values(cnt));
-  c.catAll = settings.cats.expense.length >= 5 && settings.cats.expense.every(k => c.catUsed.has(k));
-  c.custom = entries.some(e => !BASE_CATS.includes(e.cat));
-  const cny = entries.filter(e => e.cur === 'CNY');
-  c.nCny = cny.length; c.cnyTotal = cny.filter(e => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
-  c.notes = entries.filter(e => e.note).length;
-  const withTs = entries.filter(e => e.ts);
-  c.hours = withTs.map(e => new Date(e.ts).getHours());
-  c.late = withTs.some(e => daysBetween(e.date, ymd(new Date(e.ts))) >= 2);
-  c.wk = new Set(entries.map(e => new Date(e.date + 'T00:00:00').getDay()));
-  c.md = new Set(entries.map(e => e.date.slice(5)));
-  c.eom = entries.some(e => addDays(new Date(e.date + 'T00:00:00'), 1).getDate() === 1);
-  c.lucky = entries.some(e => [888, 666, 520, 1314, 168, 88].includes(e.amount));
-  c.quickN = Object.values(settings.quick).reduce((s, a) => s + a.length, 0);
-  c.renamed = petName() !== '小克';
-
-  const M = {};
-  entries.forEach(e => {
-    const k = e.date.slice(0, 7);
-    const o = M[k] = M[k] || { exp: 0, inc: 0, d: new Set() };
-    if (e.type === 'expense') o.exp += val(e); else o.inc += val(e);
-    o.d.add(e.date);
-  });
-  const nowK = ymd(new Date()).slice(0, 7), cur = M[nowK];
-  c.budget = settings.budget > 0 ? settings.budget : 0;
-  c.posMonth = Object.values(M).some(o => o.exp > 0 && o.inc > o.exp);
-  const past = Object.keys(M).filter(k => k < nowK);
-  const ok = c.budget ? past.filter(k => M[k].d.size >= 5 && M[k].exp <= c.budget) : [];
-  c.pastOk = ok; c.pastOk2 = ok.some(k => ok.includes(nextMonth(k)));
-  c.pastSave = !!c.budget && past.some(k => M[k].d.size >= 5 && M[k].exp <= c.budget * .8);
-  c.overPct = c.budget && cur ? (cur.exp - c.budget) / c.budget : 0;
-  c.half = !!c.budget && !!cur && new Date().getDate() >= 15 && cur.exp <= c.budget * .5;
-  return c;
+const exp = entries.filter(e => e.type === 'expense'), inc = entries.filter(e => e.type === 'income');
+const si = streakInfo(), c = { n: entries.length, nInc: inc.length, streak: si.best, f: settings.flags };
+const byDate = {};
+entries.forEach(e => {
+const o = byDate[e.date] = byDate[e.date] || { n: 0, exp: 0, cur: new Set() };
+o.n++; if (e.type === 'expense') o.exp++; o.cur.add(e.cur);
+});
+const vals = Object.values(byDate);
+c.days = vals.length; c.maxDayN = Math.max(0, ...vals.map(o => o.n)); c.mixDay = vals.some(o => o.cur.size > 1);
+const ns = settings.noSpend.filter(d => !(byDate[d] && byDate[d].exp)).sort();
+c.ns = ns.length; c.nsRun = 0;
+let run = 0, prev = null;
+ns.forEach(d => { run = prev && daysBetween(prev, d) === 1 ? run + 1 : 1; if (run > c.nsRun) c.nsRun = run; prev = d; });
+c.maxExp = Math.max(0, ...exp.map(e => e.hkd));
+c.tiny = exp.some(e => e.hkd > 0 && e.hkd < 1);
+const cnt = {}; exp.forEach(e => cnt[e.cat] = (cnt[e.cat] || 0) + 1);
+c.catUsed = new Set(Object.keys(cnt)); c.catMax = Math.max(0, ...Object.values(cnt));
+c.catAll = settings.cats.expense.length >= 5 && settings.cats.expense.every(k => c.catUsed.has(k));
+c.custom = entries.some(e => !BASE_CATS.includes(e.cat));
+const cny = entries.filter(e => e.cur === 'CNY');
+c.nCny = cny.length; c.cnyTotal = cny.filter(e => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
+c.notes = entries.filter(e => e.note).length;
+const withTs = entries.filter(e => e.ts);
+c.hours = withTs.map(e => new Date(e.ts).getHours());
+c.late = withTs.some(e => daysBetween(e.date, ymd(new Date(e.ts))) >= 2);
+c.wk = new Set(entries.map(e => new Date(e.date + 'T00:00:00').getDay()));
+c.md = new Set(entries.map(e => e.date.slice(5)));
+c.eom = entries.some(e => addDays(new Date(e.date + 'T00:00:00'), 1).getDate() === 1);
+c.lucky = entries.some(e => [888, 666, 520, 1314, 168, 88].includes(e.amount));
+c.quickN = Object.values(settings.quick).reduce((s, a) => s + a.length, 0);
+c.renamed = petName() !== '小克';
+const M = {};
+entries.forEach(e => {
+const k = e.date.slice(0, 7);
+const o = M[k] = M[k] || { exp: 0, inc: 0, d: new Set() };
+if (e.type === 'expense') o.exp += val(e); else o.inc += val(e);
+o.d.add(e.date);
+});
+const nowK = ymd(new Date()).slice(0, 7), cur = M[nowK];
+c.budget = settings.budget > 0 ? settings.budget : 0;
+c.posMonth = Object.values(M).some(o => o.exp > 0 && o.inc > o.exp);
+const past = Object.keys(M).filter(k => k < nowK);
+const ok = c.budget ? past.filter(k => M[k].d.size >= 5 && M[k].exp <= c.budget) : [];
+c.pastOk = ok; c.pastOk2 = ok.some(k => ok.includes(nextMonth(k)));
+c.pastSave = !!c.budget && past.some(k => M[k].d.size >= 5 && M[k].exp <= c.budget * .8);
+c.overPct = c.budget && cur ? (cur.exp - c.budget) / c.budget : 0;
+c.half = !!c.budget && !!cur && new Date().getDate() >= 15 && cur.exp <= c.budget * .5;
+return c;
 }
-
 let unlockQ = [], modalOpen = false;
 function checkAch() {
-  const c = stats(), fresh = [];
-  ACH.forEach(a => {
-    if (settings.ach[a.id]) return;
-    let ok = false; try { ok = !!a.t(c); } catch (e) {}
-    if (ok) { settings.ach[a.id] = Date.now(); fresh.push(a); }
-  });
-  if (fresh.length) { saveSettings(); unlockQ.push(...fresh); if (!modalOpen) flushUnlock(); }
-  if (!$('tab-ach').hidden) renderAch();
-  updateBadge();
+const c = stats(), fresh = [];
+ACH.forEach(a => {
+if (settings.ach[a.id]) return;
+let ok = false; try { ok = !!a.t(c); } catch (e) {}
+if (ok) { settings.ach[a.id] = Date.now(); fresh.push(a); }
+});
+if (fresh.length) { saveSettings(); unlockQ.push(...fresh); if (!modalOpen) flushUnlock(); }
+if (!$('tab-ach').hidden) renderAch();
+updateBadge();
 }
-function updateBadge() { $('achDot').hidden = Object.keys(settings.ach).length <= (settings.achSeen || 0) || !$('tab-ach').hidden; }
-function dateLabel(ts) { const d = new Date(ts); return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`; }
+function updateBadge() { ￼('tab-ach').hidden; }
+function dateLabel(ts) { const d = new Date(ts); return ⁠${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}⁠; }
 function flushUnlock() {
-  if (!unlockQ.length) return;
-  const q = unlockQ.splice(0); openModal(q[0], q.slice(1), true);
+if (!unlockQ.length) return;
+const q = unlockQ.splice(0); openModal(q[0], q.slice(1), true);
 }
 function openModal(a, rest, fresh) {
-  modalOpen = true;
-  const mc = $('mcard'); mc.classList.toggle('fresh', fresh);
-  mc.innerHTML = `<div class="mtag">${fresh ? '🎉 成就解鎖！' : '已解鎖 · ' + dateLabel(settings.ach[a.id])}</div>
-    <div class="micon" style="--c:${AC[a.cat]}">${a.icon}</div>
-    <div class="mname">${esc(a.name)}</div><div class="mdesc">${esc(a.desc)}</div>
-    <div class="msay"><span class="mpet">${petSvg('happy')}</span><span>${esc(a.line.replace(/\{name\}/g, petName()))}</span></div>
-    ${rest.length ? `<div class="mrest">同時還解鎖了 ${rest.length} 個：${rest.slice(0, 12).map(r => `<span>${r.icon} ${esc(r.name)}</span>`).join('')}${rest.length > 12 ? '<span>…</span>' : ''}</div>` : ''}
-    <button class="primary mok" id="mok" type="button">${fresh ? '收下了' : '關閉'}</button>`;
-  $('modal').hidden = false; $('mok').focus();
-  if (fresh) { confetti(); say(a.line, 9000); act('cheer', 'star'); }
+modalOpen = true;
+const mc = ￼
+￼
+￼
+￼
+￼
+${rest.length ? `<div class="mrest">同時還解鎖了 ${rest.length} 個：${rest.slice(0, 12).map(r => `<span>${r.icon} ${esc(r.name)}</span>`).join('')}{rest.length > 12 ? '<span>…</span>' : ''}</div>⁠ : ''} <button class="primary mok" id="mok" type="button">${fresh ? '收下了' : '關閉'}</button>⁠;
+$('modal').hidden = false; $('mok').focus();
+if (fresh) { confetti(); say(a.line, 9000); act('cheer', 'star'); }
 }
 function closeModal() {
-  $('modal').hidden = true; modalOpen = false; $('confetti').innerHTML = '';
-  if (unlockQ.length) flushUnlock();
+$('modal').hidden = true; modalOpen = false; $('confetti').innerHTML = '';
+if (unlockQ.length) flushUnlock();
 }
 function confetti() {
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cols = ['#D97757', '#F2B731', '#E8344E', '#2563EB', '#15803D', '#BE185D', '#FFFFFF'];
-  $('confetti').innerHTML = Array.from({ length: 40 }, () =>
-    `<i style="left:${Math.random() * 100}%;background:${pick(cols)};animation-delay:${(Math.random() * .6).toFixed(2)}s;animation-duration:${(1.8 + Math.random() * 1.4).toFixed(2)}s;--r:${Math.floor(Math.random() * 720 - 360)}deg"></i>`).join('');
+if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+const cols = ['#D97757', '#F2B731', '#E8344E', '#2563EB', '#15803D', '#BE185D', '#FFFFFF'];
+$('confetti').innerHTML = Array.from({ length: 40 }, () =>
+⁠<i style="left:${Math.random() * 100}%;background:${pick(cols)};animation-delay:${(Math.random() * .6).toFixed(2)}s;animation-duration:${(1.8 + Math.random() * 1.4).toFixed(2)}s;--r:${Math.floor(Math.random() * 720 - 360)}deg"></i>⁠).join('');
 }
 function renderAch() {
-  const done = ACH.filter(a => settings.ach[a.id]).sort((a, b) => settings.ach[b.id] - settings.ach[a.id]);
-  const todo = ACH.length - done.length, n = done.length, T = ACH.length, lv = levelOf(n), pct = Math.round(n / T * 100);
-  const cardDone = a => `<button class="acard" data-a="${a.id}" style="--c:${AC[a.cat]}"><span class="ai">${a.icon}</span><b>${esc(a.name)}</b><i>${dateLabel(settings.ach[a.id])}</i></button>`;
-  const cardLock = '<button class="acard lock" aria-label="尚未解鎖"><span class="ai">？</span><b>？？？</b><i>&nbsp;</i></button>';
-  $('tab-ach').innerHTML = `<div class="hero"><div class="heroTop"><h1>成就</h1><div class="sub num">${n} / ${T}</div></div>
-    <div class="lv"><span class="lvb">Lv.${lv.i}</span><span class="lvt">${esc(lv.t)}</span></div>
-    <div class="pbar"><i style="width:${pct}%"></i></div>
-    <div class="pnote">${todo ? `還有 ${todo} 個秘密等著你解鎖` : '全部都解鎖了，好厲害！'}</div></div>
-    <div class="body"><div class="agrid">${done.map(cardDone).join('')}${cardLock.repeat(todo)}</div></div>`;
-  if (settings.achSeen !== n) { settings.achSeen = n; saveSettings(); }
-  updateBadge();
+const done = ACH.filter(a => settings.ach[a.id]).sort((a, b) => settings.ach[b.id] - settings.ach[a.id]);
+const todo = ACH.length - done.length, n = done.length, T = ACH.length, lv = levelOf(n), pct = Math.round(n / T * 100);
+const cardDone = a => ⁠<button class="acard" data-a="${a.id}" style="--c:${AC[a.cat]}"><span class="ai">${a.icon}</span><b>${esc(a.name)}</b><i>${dateLabel(settings.ach[a.id])}</i></button>⁠;
+const cardLock = '<button class="acard lock" aria-label="尚未解鎖"><span class="ai">？</span><b>？？？</b><i> </i></button>';
+$('tab-ach').innerHTML = ⁠<div class="hero"><div class="heroTop"><h1>成就</h1><div class="sub num">${n} / ${T}</div></div> <div class="lv"><span class="lvb">Lv.${lv.i}</span><span class="lvt">${esc(lv.t)}</span></div> <div class="pbar"><i style="width:${pct}%"></i></div> <div class="pnote">${todo ? ⁠還有 ${todo} 個秘密等著你解鎖⁠ : '全部都解鎖了，好厲害！'}</div></div> <div class="body"><div class="agrid">${done.map(cardDone).join('')}${cardLock.repeat(todo)}</div></div>⁠;
+if (settings.achSeen !== n) { settings.achSeen = n; saveSettings(); }
+updateBadge();
 }
-
 /* ---------- navigation & events ---------- */
 function showTab(name) {
-  ['add', 'report', 'ach', 'settings'].forEach(n => $('tab-' + n).hidden = n !== name);
-  document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
-  if (name === 'report') { renderReport(); if (!settings.flags.report) { setFlag('report'); checkAch(); } }
-  if (name === 'ach') renderAch();
-  if (name === 'settings') renderSettings();
-  updateSub(); updateBadge();
-  window.scrollTo(0, 0);
+['add', 'report', 'ach', 'settings'].forEach(n => $('tab-' + n).hidden = n !== name);
+document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+if (name === 'report') { renderReport(); if (!settings.flags.report) { setFlag('report'); checkAch(); } }
+if (name === 'ach') renderAch();
+if (name === 'settings') renderSettings();
+updateSub(); updateBadge();
+window.scrollTo(0, 0);
 }
 document.querySelector('.tabbar').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showTab(b.dataset.tab); });
-$('typeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setType(b.dataset.v); });$('curSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCur(b.dataset.v); });
-$('amount').addEventListener('input', updateConv);$('amount').addEventListener('input', () => { if (petMood !== 'sleep') look('d', 1600); });
-$('rate').addEventListener('input', updateConv);$('note').addEventListener('input', renderQuick);
-$('chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { form.cat = b.dataset.c; renderChips(); } });$('quick').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.qadd) {
-    const note = $('note').value.trim();
-    if (!form.cat || !note) return;
-    (settings.quick[form.cat] = settings.quick[form.cat] || []).push(note);
-    settings.dismissed = settings.dismissed.filter(k => k !== form.cat + '|' + note); saveSettings();
-    toast('已加入「' + form.cat + '」常用備註');
-    checkAch();
-  } else if (b.dataset.q) {
-    $('note').value =$('note').value.trim() === b.dataset.q ? '' : b.dataset.q;
-  }
-  renderQuick();
+￼('curSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCur(b.dataset.v); });
+￼('amount').addEventListener('input', () => { if (petMood !== 'sleep') look('d', 1600); });
+￼('note').addEventListener('input', renderQuick);
+￼('quick').addEventListener('click', e => {
+const b = e.target.closest('button'); if (!b) return;
+if (b.dataset.qadd) {
+const note = $('note').value.trim();
+if (!form.cat || !note) return;
+(settings.quick[form.cat] = settings.quick[form.cat] || []).push(note);
+settings.dismissed = settings.dismissed.filter(k => k !== form.cat + '|' + note); saveSettings();
+toast('已加入「' + form.cat + '」常用備註');
+checkAch();
+} else if (b.dataset.q) {
+￼('note').value.trim() === b.dataset.q ? '' : b.dataset.q;
+}
+renderQuick();
 });
-$('save').addEventListener('click', saveEntry);$('del').addEventListener('click', deleteEntry);
-$('cancel').addEventListener('click', resetForm);$('nospend').addEventListener('click', toggleNoSpend);
-
+￼('del').addEventListener('click', deleteEntry);
+￼('nospend').addEventListener('click', toggleNoSpend);
 /* 戳小克 */
 let tapTimes = [];
 $('pet').addEventListener('click', () => {
-  const f = settings.flags; f.taps = (f.taps || 0) + 1; saveSettings();
-  const now = Date.now(); tapTimes = tapTimes.filter(t => now - t < 2200); tapTimes.push(now);
-  const st = petState(), fat = st.mood.indexOf('full') === 0;
-  let line = '';
-  if (f.taps === 10) line = '這麼喜歡碰碰我嗎？好開心……';
-  else if (f.taps === 100) line = '已經戳了一百下了呢……我也最喜歡你了。';
-
-  if (tapTimes.length >= 6) { act('dizzy'); tapTimes = []; line = line || pickSafe(L.dizzy); }
-  else if (st.mood === 'sleep') { act('jump'); setFace('wow', 800); line = line || pickSafe(L.tapSleep); }
-  else if (fat) { act('jiggle'); setFace('grin', 1300); line = line || pickSafe(L.tapFat); }
-  else {
-    const r = Math.random();
-    if (r < .28) { act('jump'); setFace('love', 2000); }
-    else if (r < .5) act('wave');
-    else if (r < .7) { act('jump'); setFace('wink', 1000); }
-    else if (r < .85) { act('jiggle'); setFace('grin', 1200); }
-    else act('cheer');
-    line = line || (Math.random() < .5 ? pickSafe(L.tap) : moodLine(st));
-  }
-  say(line);
-  if (f.taps === 10 || f.taps === 100) checkAch();
+const f = settings.flags; f.taps = (f.taps || 0) + 1; saveSettings();
+const now = Date.now(); tapTimes = tapTimes.filter(t => now - t < 2200); tapTimes.push(now);
+const st = petState(), fat = st.mood.indexOf('full') === 0;
+let line = '';
+if (f.taps === 10) line = '這麼喜歡碰碰我嗎？好開心……';
+else if (f.taps === 100) line = '已經戳了一百下了呢……我也最喜歡你了。';
+if (tapTimes.length >= 6) { act('dizzy'); tapTimes = []; line = line || pickSafe(L.dizzy); }
+else if (st.mood === 'sleep') { act('jump'); setFace('wow', 800); line = line || pickSafe(L.tapSleep); }
+else if (fat) { act('jiggle'); setFace('grin', 1300); line = line || pickSafe(L.tapFat); }
+else {
+const r = Math.random();
+if (r < .28) { act('jump'); setFace('love', 2000); }
+else if (r < .5) act('wave');
+else if (r < .7) { act('jump'); setFace('wink', 1000); }
+else if (r < .85) { act('jiggle'); setFace('grin', 1200); }
+else act('cheer');
+line = line || (Math.random() < .5 ? pickSafe(L.tap) : moodLine(st));
+}
+say(line);
+if (f.taps === 10 || f.taps === 100) checkAch();
 });
-
 /* 點擊視線追隨 */
 let lastLook = 0;
 document.addEventListener('pointerdown', ev => {
-  if ($('tab-add').hidden || petMood === 'sleep' || modalOpen) return;
-  const now = Date.now();
-  if (now - lastLook < 500) return;
-  lastLook = now;
-  const r = $('pet').getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2);
-  if (Math.abs(dx) < 40 && Math.abs(dy) < 60) return;
-  look(Math.abs(dy) > 120 ? 'd' : dx < 0 ? 'l' : 'r', 1100);
+if ($('tab-add').hidden || petMood === 'sleep' || modalOpen) return;
+const now = Date.now();
+if (now - lastLook < 500) return;
+lastLook = now;
+const r = $('pet').getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2);
+if (Math.abs(dx) < 40 && Math.abs(dy) < 60) return;
+look(Math.abs(dy) > 120 ? 'd' : dx < 0 ? 'l' : 'r', 1100);
 });
-
 $('modal').addEventListener('click', e => { if (e.target.id === 'modal' || e.target.id === 'mok') closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && modalOpen) closeModal(); });
-
 $('tab-report').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.mode) { rep.mode = b.dataset.mode; renderReport(); }
-  else if (b.dataset.nav) { if (b.dataset.nav === 'today') rep.anchor = new Date(); else shift(+b.dataset.nav); renderReport(); }
-  else if (b.dataset.d) { rep.mode = 'day'; rep.anchor = new Date(b.dataset.d + 'T00:00:00'); renderReport(); window.scrollTo(0, 0); }
-  else if (b.dataset.id) startEdit(b.dataset.id);
+const b = e.target.closest('button'); if (!b) return;
+if (b.dataset.mode) { rep.mode = b.dataset.mode; renderReport(); }
+else if (b.dataset.nav) { if (b.dataset.nav === 'today') rep.anchor = new Date(); else shift(+b.dataset.nav); renderReport(); }
+else if (b.dataset.d) { rep.mode = 'day'; rep.anchor = new Date(b.dataset.d + 'T00:00:00'); renderReport(); window.scrollTo(0, 0); }
+else if (b.dataset.id) startEdit(b.dataset.id);
 });
-$('tab-ach').addEventListener('click', e => {   const b = e.target.closest('.acard'); if (!b) return;   const a = ACH.find(x => x.id === b.dataset.a);   if (a && settings.ach[a.id]) openModal(a, [], false); else toast(pickSafe(L.lockedTap)); });$('tab-settings').addEventListener('change', e => {
-  if (e.target.id === 'setBudget') {
-    const v = parseFloat(e.target.value); settings.budget = v > 0 ? v : 0; saveSettings(); updateSub();
-    toast(settings.budget ? '每月預算已儲存' : '已取消預算'); checkAch();
-  } else if (e.target.id === 'setPet') {
-    settings.petName = e.target.value.trim() || '小克'; e.target.value = settings.petName; saveSettings(); updateSub();
-    toast('已改名為「' + settings.petName + '」'); renderSettings(); checkAch();
-  } else if (e.target.id === 'setRate') {
-    const v = parseFloat(e.target.value);
-    if (v > 0) {
-      settings.rate = Math.round(v * 1e4) / 1e4;
-      saveSettings();
-      toast('匯率已儲存');
-    } else {
-      e.target.value = settings.rate;
-    }
-  }
+('tab-ach').addEventListener('click', e => {   const b = e.target.closest('.acard'); if (!b) return;   const a = ACH.find(x => x.id === b.dataset.a);   if (a && settings.ach[a.id]) openModal(a, [], false); else toast(pickSafe(L.lockedTap)); });('tab-settings').addEventListener('change', e => {
+if (e.target.id === 'setBudget') {
+const v = parseFloat(e.target.value); settings.budget = v > 0 ? v : 0; saveSettings(); updateSub();
+toast(settings.budget ? '每月預算已儲存' : '已取消預算'); checkAch();
+} else if (e.target.id === 'setPet') {
+settings.petName = e.target.value.trim() || '小克'; e.target.value = settings.petName; saveSettings(); updateSub();
+toast('已改名為「' + settings.petName + '」'); renderSettings(); checkAch();
+} else if (e.target.id === 'setRate') {
+const v = parseFloat(e.target.value);
+if (v > 0) {
+settings.rate = Math.round(v * 1e4) / 1e4;
+saveSettings();
+toast('匯率已儲存');
+} else {
+e.target.value = settings.rate;
+}
+}
 });
 $('tab-settings').addEventListener('click', e => {
-  const b = e.target.closest('button[data-act]'); if (!b) return;
-  const act = b.dataset.act, t = b.dataset.t;
-  if (act === 'fetchRate') fetchRate(true);
-  else if (act === 'export') { if (!entries.length && !settings.noSpend.length) toast('暫無帳目可匯出'); else exportCsv(); }
-  else if (act === 'import') $('file').click();
-  else if (act === 'qsel') { qSel = b.dataset.c; renderSettings(); }
-  else if (act === 'qadd') {
-    const v = $('newq').value.trim(); if (!v) return;
-    const l = settings.quick[qSel] = settings.quick[qSel] || [];
-    if (l.includes(v)) { toast('已有此備註'); return; }
-    l.push(v); settings.dismissed = settings.dismissed.filter(k => k !== qSel + '|' + v); saveSettings(); renderSettings(); renderQuick(); checkAch();
-  } else if (act === 'qdel') {
-    settings.quick[qSel] = (settings.quick[qSel] || []).filter(q => q !== b.dataset.q);
-    settings.dismissed.push(qSel + '|' + b.dataset.q); saveSettings(); renderSettings(); renderQuick();
-  } else if (act === 'addcat') {
-    const v = $('newcat-' + t).value.trim(); if (!v) return;
-    if (settings.cats[t].includes(v)) { toast('分類已存在'); return; }
-    settings.cats[t].push(v); saveSettings(); renderSettings(); renderChips();
-  } else if (act === 'delcat') {
-    if (settings.cats[t].length <= 1) { toast('至少要保留一個分類'); return; }
-    settings.cats[t] = settings.cats[t].filter(c => c !== b.dataset.c); saveSettings(); renderSettings(); renderChips();
-  } else if (act === 'clear') {
-    showConfirm(`確定清除全部 ${entries.length} 筆帳目？此操作無法還原，建議先匯出備份。`, () => {
-      entries = []; settings.noSpend = []; saveEntries(); saveSettings(); renderSettings(); updateSub(); toast('已清除所有帳目');
-    });
-  }
+const b = e.target.closest('button[data-act]'); if (!b) return;
+const act = b.dataset.act, t = b.dataset.t;
+if (act === 'fetchRate') fetchRate(true);
+else if (act === 'export') { if (!entries.length && !settings.noSpend.length) toast('暫無帳目可匯出'); else exportCsv(); }
+else if (act === 'import') $('file').click();
+else if (act === 'qsel') { qSel = b.dataset.c; renderSettings(); }
+else if (act === 'qadd') {
+const v = $('newq').value.trim(); if (!v) return;
+const l = settings.quick[qSel] = settings.quick[qSel] || [];
+if (l.includes(v)) { toast('已有此備註'); return; }
+l.push(v); settings.dismissed = settings.dismissed.filter(k => k !== qSel + '|' + v); saveSettings(); renderSettings(); renderQuick(); checkAch();
+} else if (act === 'qdel') {
+settings.quick[qSel] = (settings.quick[qSel] || []).filter(q => q !== b.dataset.q);
+settings.dismissed.push(qSel + '|' + b.dataset.q); saveSettings(); renderSettings(); renderQuick();
+} else if (act === 'addcat') {
+const v = $('newcat-' + t).value.trim(); if (!v) return;
+if (settings.cats[t].includes(v)) { toast('分類已存在'); return; }
+settings.cats[t].push(v); saveSettings(); renderSettings(); renderChips();
+} else if (act === 'delcat') {
+if (settings.cats[t].length <= 1) { toast('至少要保留一個分類'); return; }
+settings.cats[t] = settings.cats[t].filter(c => c !== b.dataset.c); saveSettings(); renderSettings(); renderChips();
+} else if (act === 'clear') {
+showConfirm(⁠確定清除全部 ${entries.length} 筆帳目？此操作無法還原，建議先匯出備份。⁠, () => {
+entries = []; settings.noSpend = []; saveEntries(); saveSettings(); renderSettings(); updateSub(); toast('已清除所有帳目');
+});
+}
 });
 $('file').addEventListener('change', e => {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = '';
+const f = e.target.files[0]; if (!f) return;
+const r = new FileReader(); r.onload = () => importCsv(String(r.result)); r.readAsText(f); e.target.value = '';
 });
-
 /* ---------- init ---------- */
 $('date').value = ymd(new Date());
 setType('expense');
 setCur('HKD');
 updateSub();
 {
-  const st = petState();
-  if (st.mood === 'sleep') setFlag('woke');
-  setTimeout(() => { say(moodLine(st), 6500); act(st.mood === 'sleep' ? 'yawn' : 'wave'); checkAch(); }, 500);
+const st = petState();
+if (st.mood === 'sleep') setFlag('woke');
+setTimeout(() => { say(moodLine(st), 6500); act(st.mood === 'sleep' ? 'yawn' : 'wave'); checkAch(); }, 500);
 }
 scheduleIdle();
 updateBadge();
